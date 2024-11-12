@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "products": {
+      "title": "placa de video",
+      "description": "RX570 4gb",
+      "price": 500,
+      "thumbnail": [
+        "foto12",
+        "teste"
+      ],
+      "code": "12",
+      "stock": 10,
+      "category": "Tecnologia"
+    }
+  },
+  {
+    "id": 2,
+    "products": {
+      "title": "placa de video",
+      "description": "RX570 4gb",
+      "price": 500,
+      "thumbnail": [
+        "foto12",
+        "teste"
+      ],
+      "code": "12",
+      "stock": 10,
+      "category": "Tecnologia"
+    }
+  }
+]

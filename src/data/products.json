@@ -1,0 +1,16 @@
+[
+  {
+    "id": 2,
+    "title": "placa de video",
+    "description": "RX570 4gb",
+    "price": 500,
+    "thumbnail": [
+      "foto12",
+      "teste"
+    ],
+    "code": "13",
+    "stock": 10,
+    "status": true,
+    "category": "Tecnologia"
+  }
+]
