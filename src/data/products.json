@@ -2,7 +2,35 @@
   {
     "id": 2,
     "title": "placa de video",
+    "description": " 4gb",
+    "price": 500,
+    "thumbnail": [
+      "foto12",
+      "teste"
+    ],
+    "code": "13",
+    "stock": 10,
+    "status": true,
+    "category": "Tecnologia"
+  },
+  {
+    "id": 3,
+    "title": "placa de video",
     "description": "RX570 4gb",
+    "price": 500,
+    "thumbnail": [
+      "foto12",
+      "teste"
+    ],
+    "code": "13",
+    "stock": 10,
+    "status": true,
+    "category": "Tecnologia"
+  },
+  {
+    "id": 4,
+    "title": "placa de video",
+    "description": "RTX 4gb",
     "price": 500,
     "thumbnail": [
       "foto12",

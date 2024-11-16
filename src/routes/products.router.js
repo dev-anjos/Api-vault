@@ -3,6 +3,7 @@ const express = require('express');
 
 
 const productManager = require('../controllers/produtcs.controller');
+const productMiddleware = require('../middleware/products.middleware');
 const pm = new productManager
 
 
@@ -10,6 +11,10 @@ const router = express.Router();
 
 router.use(express.json())
 router.use(express.urlencoded({ extended: true }))
+
+
+//valido para todas rotas
+router.use(productMiddleware);
 
 router.get('/', async (req, res) => {
     
@@ -23,10 +28,8 @@ router.get('/', async (req, res) => {
         } else {
             res.status(200)
             res.json(products);
-          
         }
     })
-
 })
 
 router.get('/:id', async (req, res) => {
@@ -55,7 +58,6 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
     const { title, description, price, thumbnail = {}, code, stock, category, status} = req.body;
-    // console.log(title, description, price, thumbnail, code, stock)
     try {
         const newProduct =  pm.addProduct({ title, description, price, thumbnail, code, stock, category, status});
         res.status(201).json(newProduct);
@@ -85,6 +87,4 @@ router.delete('/:id', async (req, res) => {
     }
     
 })
-
-
 module.exports = router;

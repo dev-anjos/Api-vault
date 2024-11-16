@@ -5,7 +5,7 @@ const { parse } = require('path');
 class ProductManager {
   constructor() {
     //this.products = [];
-    this.path = "src/data/products.json";
+    this.path = "data/products.json";
     this.id = 1;
   }
 
@@ -73,12 +73,7 @@ class ProductManager {
   getProductById(id) {
     const existingProducts = this.#readFile();
     const productId = parseInt(id);
-    if (id == 0)  {
-      console.log("Achou o zero")
-    }
-
     const product = existingProducts.find((product) => product.id == productId);
-
 
     if (!product) {
       throw new Error("Produto não encontrado.");
@@ -93,14 +88,10 @@ class ProductManager {
 
   updateProduct(id, updatedProduct) {
     const existingProducts = this.#readFile();
-    console.log(id)
-    // console.log(existingProducts)
     const productIndex = existingProducts.findIndex(
       (product) => product.id === id
     );
 
-    console.log(productIndex)
-    
     if (productIndex == -1) {
       throw new Error("Produto não encontrado.");
     }
@@ -122,32 +113,4 @@ class ProductManager {
     this.#writeFile(existingProducts);
   }
 };
-
 module.exports = ProductManager
-
-// const productManager = new ProductManager('products.json');
-
-// // lista de produtos
-// console.log(`Lista completa de produtos: ${productManager.getProducts()}`);
-
-// // adiciona um novo produto
-// productManager.addProduct({
-//     title: 'cenoura',
-//     description: 'cenoura',
-//     price: 10.0,
-//     thumbnail: 'imagemA.png',
-//     code: '010',
-//     stock: 10
-// });
-
-// // busca por id
-// console.log(`Produto por id: ${JSON.stringify(productManager.getProductById(3))}`);
-
-// // atualiza o preço
-// productManager.updateProduct(3, { price: 10000.0});
-
-// // deleta o produto
-// productManager.deleteProduct(4);
-
-// console.log(`Lista completa de produtos após deletar o 4: ${productManager.getProducts()}`);
-
