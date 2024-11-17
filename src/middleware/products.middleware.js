@@ -2,6 +2,7 @@
 const validateDataMiddleware = async (req, res, next) => {
     const { limit, title, description, price, thumbnail = {}, code, stock, category, status} = req.body;
     const {id} = req.params
+    console.log(id);
 
     const limitNumber = parseInt(limit);
     const titleString = String(title);

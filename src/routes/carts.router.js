@@ -1,17 +1,16 @@
 
 const express = require('express');
 const cartManager = require('../controllers/carts.controller.js');
-const validateDataMiddleware = require('../middleware/carts.middleware');
+// const {validateRequestMiddleware}= require('../middleware/carts.middleware');
 const newCartManager = new cartManager
 const router = express.Router();
 
 router.use(express.json())
 router.use(express.urlencoded({ extended: true }))
 
-router.use(validateDataMiddleware);
-
-router.post('/', async (req, res) => {
+router.post('/',  async (req, res) => {
     const {pid, quantity} = req.body;
+    console.log( 'console rota' + pid, quantity);
     try {
         const newCart = await newCartManager.createCart(pid,quantity);
         res.status(201).json(newCart);
@@ -35,7 +34,7 @@ router.get('/:cid', async (req, res) => {
     const { cid } = req.params;
 
     try {
-        const cart = await newCartManager.getCart(parseInt(cid));
+        const cart = await newCartManager.getCart(cid);
         res.json(cart);
     } catch (error) {
         res.json({ error: error.message });

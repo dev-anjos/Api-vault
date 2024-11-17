@@ -1,20 +1,15 @@
 
 const express = require('express');
-
-
 const productManager = require('../controllers/produtcs.controller');
-const productMiddleware = require('../middleware/products.middleware');
+// const productMiddleware = require('../middleware/products.middleware');
 const pm = new productManager
-
-
 const router = express.Router();
 
 router.use(express.json())
 router.use(express.urlencoded({ extended: true }))
 
-
 //valido para todas rotas
-router.use(productMiddleware);
+// router.use(productMiddleware);
 
 router.get('/', async (req, res) => {
     
