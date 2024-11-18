@@ -1,16 +1,15 @@
 
 const express = require('express');
 const cartManager = require('../controllers/carts.controller.js');
-// const {validateRequestMiddleware}= require('../middleware/carts.middleware');
+const {validateParams, validateCart}= require('../middleware/carts.middleware');
 const newCartManager = new cartManager
 const router = express.Router();
 
 router.use(express.json())
 router.use(express.urlencoded({ extended: true }))
 
-router.post('/',  async (req, res) => {
+router.post('/', validateCart ,async (req, res) => {
     const {pid, quantity} = req.body;
-    console.log( 'console rota' + pid, quantity);
     try {
         const newCart = await newCartManager.createCart(pid,quantity);
         res.status(201).json(newCart);
@@ -19,7 +18,7 @@ router.post('/',  async (req, res) => {
     }
 })
 
-router.post('/:cid/product/:pid', async (req, res) => {
+router.post('/:cid/product/:pid',validateParams ,async (req, res) => {
     const {cid, pid} = req.params;
     const {quantity} = req.body;
     try {
@@ -30,11 +29,11 @@ router.post('/:cid/product/:pid', async (req, res) => {
     }
 })
 
-router.get('/:cid', async (req, res) => {
+router.get('/:cid', validateParams,  async (req, res) => {
     const { cid } = req.params;
 
     try {
-        const cart = await newCartManager.getCart(cid);
+        const cart = await newCartManager.getCart(parseInt(cid));
         res.json(cart);
     } catch (error) {
         res.json({ error: error.message });

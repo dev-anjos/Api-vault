@@ -5,10 +5,37 @@
     "description": "RX570 4gb",
     "price": 500,
     "thumbnail": [
+      "polinpoloso",
+      "teste1"
+    ],
+    "code": "12",
+    "stock": 10,
+    "status": true,
+    "category": "Tecnologia"
+  },
+  {
+    "id": 2,
+    "title": 0,
+    "description": "RX570 4gb",
+    "price": 500,
+    "thumbnail": [
       "foto12",
       "teste"
     ],
-    "code": "13",
+    "code": "31",
+    "stock": 100,
+    "status": true
+  },
+  {
+    "id": 3,
+    "title": "placa de video",
+    "description": "RX570 4gb",
+    "price": 500,
+    "thumbnail": [
+      "foto12",
+      "teste1"
+    ],
+    "code": "12",
     "stock": 10,
     "status": true,
     "category": "Tecnologia"

@@ -87,7 +87,6 @@ class CartManager{
             throw new Error("ID do carrinho não fornecido.");
         }
         const cart = existingCarts.find((cart) => cart.id === parseInt(id));
-        console.log(cart);
         if (!cart) 
         {
             throw new Error("Carrinho não encontrado.");

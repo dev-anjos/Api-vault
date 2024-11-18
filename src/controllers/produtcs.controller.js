@@ -32,9 +32,7 @@ class ProductManager {
     }
 
     addProduct({ title, description, price, thumbnail, code, stock ,category, status = true, })  {
-      if (!title || !description || !price || !code || !stock || !category) {
-        throw new Error("Todos os campos são obrigatórios.");
-      }
+  
 
         const existingProducts = this.#readFile();
         const codeExists = existingProducts
@@ -102,12 +100,13 @@ class ProductManager {
   }
 
   deleteProduct(id) {
+   
     const existingProducts = this.#readFile();
     const productIndex = existingProducts.findIndex(
       (product) => product.id === id
     );
     if (productIndex === -1) {
-      throw new Error("Produto não encontrado.");
+      throw new Error( `O produto com o ID informado não foi encontrado.`);
     }
     existingProducts.splice(productIndex, 1);
     this.#writeFile(existingProducts);
