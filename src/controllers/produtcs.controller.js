@@ -11,8 +11,6 @@ class ProductManager {
     this.id = 1;
   }
 
-  
-
     // Método privado para leitura do arquivo
     #readFile() {
 
@@ -27,8 +25,6 @@ class ProductManager {
 
     
       const fileContent = fs.readFileSync(this.path, "utf-8");
-      console.log(fileContent.charCodeAt(0)); // imprime o código do primeiro caractere
-      console.log(fileContent.charCodeAt(fileContent.length - 1)); // imprime o código do último caractere
 
       return fileContent ? JSON.parse(fileContent) : []; // Retorna array vazio se o arquivo estiver vazio
       } catch (err) {
@@ -87,8 +83,6 @@ class ProductManager {
 
   getProductById(id) {
     const existingProducts = this.#readFile();
-    console.log(existingProducts)
-    console.log(id)
     const productId = parseInt(id);
     const product = existingProducts.find((product) => product.id == productId);
 

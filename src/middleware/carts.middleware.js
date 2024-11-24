@@ -19,8 +19,6 @@ const validateParams = (req, res, next) => {
   const validateCart = (req, res, next) => {
     const {pid, quantity} = req.body;
 
-    console.log(pid, quantity);
-
     if (!pid || isNaN(pid) || pid <= 0) {
       return res.status(400).json({ error: 'PID inválido' });
     }
