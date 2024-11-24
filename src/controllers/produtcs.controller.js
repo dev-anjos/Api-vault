@@ -2,17 +2,34 @@
 const fs = require('fs');
 const { parse } = require('path');
 
+
+
 class ProductManager {
   constructor() {
     //this.products = [];
-    this.path = "data/products.json";
+    this.path = "src/data/products.json";
     this.id = 1;
   }
 
+  
+
     // Método privado para leitura do arquivo
     #readFile() {
+
+      if (fs.existsSync(this.path)) {
+        const fileContent = fs.readFileSync(this.path, "utf-8");
+        // ...
+      } else {
+        console.error("Arquivo não encontrado:", this.path);
+      }
+
       try {
+
+    
       const fileContent = fs.readFileSync(this.path, "utf-8");
+      console.log(fileContent.charCodeAt(0)); // imprime o código do primeiro caractere
+      console.log(fileContent.charCodeAt(fileContent.length - 1)); // imprime o código do último caractere
+
       return fileContent ? JSON.parse(fileContent) : []; // Retorna array vazio se o arquivo estiver vazio
       } catch (err) {
       console.error("Erro ao ler o arquivo:", err);
@@ -70,6 +87,8 @@ class ProductManager {
 
   getProductById(id) {
     const existingProducts = this.#readFile();
+    console.log(existingProducts)
+    console.log(id)
     const productId = parseInt(id);
     const product = existingProducts.find((product) => product.id == productId);
 

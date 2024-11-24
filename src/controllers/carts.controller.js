@@ -2,7 +2,7 @@ const fs = require('fs');
 
 class CartManager{
     constructor(){
-        this.path = "data/carts.json";
+        this.path = "src/data/products.json";
         this.id = 1;
     }
 

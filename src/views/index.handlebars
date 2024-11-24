@@ -1,0 +1,13 @@
+<div class="container">
+    <h1>Produtos</h1>
+    <ul class="list-group">
+        {{#each products}}
+            <li class="list-group-item">
+                {{title}} - {{description}} - R${{price}}
+            </li>
+        {{/each}}
+    </ul>
+</div>
+
+<script src="/socket.io/socket.io.js" ></script>
+<script src="/js/index.js"></script>

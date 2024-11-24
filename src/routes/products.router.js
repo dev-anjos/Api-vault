@@ -8,8 +8,6 @@ const router = express.Router();
 router.use(express.json())
 router.use(express.urlencoded({ extended: true }))
 
-// // valido para todas rotas
-// router.use(productMiddleware);
 
 router.get('/', async (req, res) => {
     const limit = req.query.limit;

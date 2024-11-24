@@ -15,28 +15,23 @@
   },
   {
     "id": 2,
-    "title": 0,
-    "description": "RX570 4gb",
+    "title": "SDD",
+    "description": "Asgard 500gb",
     "price": 500,
-    "thumbnail": [
-      "foto12",
-      "teste"
-    ],
-    "code": "31",
-    "stock": 100,
-    "status": true
+    "thumbnail": {},
+    "code": "500",
+    "stock": 90,
+    "status": true,
+    "category": "Tecnologia"
   },
   {
     "id": 3,
-    "title": "placa de video",
-    "description": "RX570 4gb",
+    "title": "Mouse",
+    "description": "Delux m900",
     "price": 500,
-    "thumbnail": [
-      "foto12",
-      "teste1"
-    ],
-    "code": "12",
-    "stock": 10,
+    "thumbnail": {},
+    "code": "510",
+    "stock": 90,
     "status": true,
     "category": "Tecnologia"
   }
