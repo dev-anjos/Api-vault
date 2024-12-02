@@ -1,0 +1,28 @@
+    <form action="/api/products" method="POST">
+    <input type="text" name="title" placeholder="Nome do produto" required><br>
+    <input type="text" name="description" placeholder="Descrição" required><br>
+    <input type="number" name="price" placeholder="Preço" required><br>
+    <input type="text" name="code" id="code" placeholder="Codigo" required><br>
+    <input type="number" name="stock" placeholder="Estoque" required><br>
+    <input type="text" name="category" placeholder="Categoria" required><br><br>
+
+    <button type="submit" >Adicionar produto</button>
+    </form>
+
+    <script>
+        const codeId = document.getElementById("code");
+
+        codeId.addEventListener("input", async () => {
+            const code = codeId.value;
+            try {
+                const response = await fetch(`/api/products/${code}`);
+                const product = await response.json();
+                if (!product) {
+                    alert("Código não existe");
+                }
+            } catch (error) {
+                console.log(error);
+            }
+
+        });
+    </script>

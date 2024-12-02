@@ -1,4 +1,3 @@
 const path = require('path');
-const dirname = path.dirname(require.main.filename);
+const fs = require('fs');
 
-module.exports = dirname;

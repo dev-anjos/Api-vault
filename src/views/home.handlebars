@@ -1,0 +1,12 @@
+<div class="container">
+    <h1> Home Produtos</h1>
+    <ul class="list-group">
+        {{#each products}}
+            <li class="list-group-item">
+                {{title}} - {{description}} - R${{price}}
+            </li>
+        {{/each}}
+    </ul>
+    <button onclick="location.href='/api/products/addproduct'">Adicionar Produto</button>
+</div>
+

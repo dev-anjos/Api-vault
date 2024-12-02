@@ -1,5 +1,7 @@
 <div class="container">
-    <h1>Produtos</h1>
+    <h1>Realtime Products</h1>
+
+
     <ul class="list-group">
         {{#each products}}
             <li class="list-group-item">
@@ -7,7 +9,6 @@
             </li>
         {{/each}}
     </ul>
+    <button onclick="location.href='/api/products'">retornar para home</button>
 </div>
 
-<script src="/socket.io/socket.io.js" ></script>
-<script src="/js/index.js"></script>

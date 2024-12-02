@@ -1,10 +1,11 @@
-const socket = io();
+socket.on("connect", () => {
+    console.log("Conectado ao servidor");
+})
 
-// console.log('Olá, eu estou me comunicando com o servidor a partir de um WebSocket')
+socket.on("refreshProducts", () => {
+    alert("Produto atualizados com sucesso");
+    location.reload(); // Recarrega a página para refletir as alterações
+});
 
-// socket.emit('message', "ola, servidor")
-// socket.emit('message', "tudo bem?")
 
-// socket.on('event_individual', (message) => {
-//     console.log(message);
-// })
+

@@ -1,63 +1,76 @@
 
 const express = require('express');
 const productManager = require('../controllers/produtcs.controller');
-const{validateProductId, validateProductBody}= require('../middleware/products.middleware');
+const validateProductBody= require('../middleware/products.middleware');
 const pm = new productManager
 const router = express.Router();
+
 
 router.use(express.json())
 router.use(express.urlencoded({ extended: true }))
 
 
 router.get('/', async (req, res) => {
+
     const limit = req.query.limit;
-
-    pm.getProducts().then(products => {
-        if (limit) {
-            const limitedProducts = products.slice(0, limit);
-            res.json(limitedProducts);
-        } else {
-            res.json(products);
-        }
-    })
-
+    
+    try {
+        pm.getProducts().then(products => {
+            if (limit) {
+                const limitedProducts = products.slice(0, limit);
+                res.render("home", { products: limitedProducts });
+            } else {
+                res.render("home", { products });
+            }
+        })
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 })
 
-router.get('/:id', validateProductId, async (req, res) => {
+router.get('/addproduct', async (req, res) => {
+    res.render("addProduct", );
+});
+
+
+router.get('/realtimeproducts', async (req, res) => {
+    const products = await pm.getProducts();
+    res.render("realTimeProducts", { products });
+});
+
+
+router.get('/:id', async (req, res) => {
     const { id } = req.params;
    
     try {
         const product = await pm.getProductById(parseInt(id));
-        const htmlResponse = `
-        <html>
-            <body>
-                <h1 style="color: red">${product.title}</h1>
-                <p>${product.description}</p>
-                <p>${product.price}</p>
-                <p>${product.thumbnail}</p>
-                <p>${product.code}</p>
-                <p>${product.stock}</p>
-            </body
-        </html>
-        `
-        res.send(htmlResponse);
+        res.json(product);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 
 })
 
-router.post('/',validateProductBody , async (req, res) => {
+router.post('/', validateProductBody,async (req, res) => {
     const { title, description, price, thumbnail = {}, code, stock, category, status} = req.body;
+
     try {
         const newProduct =  pm.addProduct({ title, description, price, thumbnail, code, stock, category, status});
-        res.status(201).json(newProduct);
+ 
+        const io = req.app.socketServer;
+        if (io) {
+            io.emit('addProduct', newProduct);
+        }
+        res.redirect("/api/products/realtimeproducts");
+
     } catch (error) {
         res.json({ error: error.message });
     }
+   
+  
 })
 
-router.put('/:id',validateProductId ,async (req, res) => {
+router.put('/:id' ,async (req, res) => {
     const { id } = req.params;
     const updatedProduct = req.body;
     try {
@@ -68,7 +81,7 @@ router.put('/:id',validateProductId ,async (req, res) => {
     }
 })
 
-router.delete('/:id', validateProductId , async (req, res) => {
+router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     
     try {

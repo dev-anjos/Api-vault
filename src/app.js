@@ -2,47 +2,62 @@ const express = require("express");
 const productsRouter = require('./routes/products.router');
 const cartsRouter = require('./routes/carts.router');
 const handlebars = require('express-handlebars');  
-const _dirname = require('./utils');
 const  {Server} = require('socket.io') 
-const viewsRouter = require('./routes/view.router');
-const http = require('http');
 
+const http = require('http');
+const path = require("path");
+// const { default: mongoose } = require("mongoose");
+const  validateProductBody  = require('./middleware/products.middleware');
 const port = 8080
 const app = express();
+const server = http.createServer(app)
+const socketServer = new Server(server)
 
 // configura para interpretar solicitações com dados codificados no formato URL
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 
-const server = http.createServer(app)
-const socketServer = new Server(server)
-
 app.engine('handlebars', handlebars.engine());
 app.set('view engine', 'handlebars');
-app.set('views', _dirname + '/views');
+app.set('views',path.join(__dirname, '/views'));
 
 
 // configura o aplicativo para servir arquivos estáticos que estão na pasta public
-app.use(express.static(_dirname + '/Public'));
+const staticPath = path.join(__dirname, "public");
+app.use(express.static(staticPath));
 
-//rotas
+
+app.use((req, res, next) => {
+    req.app.socketServer = socketServer; // Passa o objeto io para as rotas
+    next();
+});
+
+
+
+// rotas
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
-app.use('/views',viewsRouter);
+
+// mongoose.connect('mongodb+srv://dev-anjos:coder@cluster0.ruzk8.mongodb.net/usersdb')
+//     .then(() =>{
+//         console.log('Conectado a la base de datos')
+//     }).catch((error) => {
+//         console.log(error)
+//     })
 
 socketServer.on('connection', socket => {
     console.log('Usuário conectado');
-    socket.on('disconnect', () => {
-        console.log('Usuário desconectado');
-    });
 
-    socket.on('message', data => {
-        console.log(data);
-        socketServer.emit('message', data);
-    });
 
-    socket.emit('event_individual', 'Essa mensagem deve ser recebida pelo socket cliente');
+    socket.on('newProduct' , (newProduct) => {
+                    
+        const productsUpdated = data;
+
+        socketServer.emit('refreshProducts', newProduct);
+    })
+
+    
 });
 
 server.listen(port, () => {
