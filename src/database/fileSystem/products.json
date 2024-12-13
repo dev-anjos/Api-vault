@@ -1,11 +1,10 @@
 [
   {
-    "id": 1,
     "title": "Mouse",
     "description": "Delux m900",
     "price": 500,
     "thumbnail": {},
-    "code": "530",
+    "code": "532",
     "stock": 90,
     "status": true,
     "category": "Tecnologia"

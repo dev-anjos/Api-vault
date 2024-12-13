@@ -136,11 +136,12 @@ class ProductManager {
   // }
 
   async getProducts (){
-    return productsModel.find().lean();
+    const products = await productsModel.find().lean();
+    return products   
   }
 
   async deleteProduct(id) {
-    await productsModel.findByIdAndDelete(id);
+    return await productsModel.findByIdAndDelete(id);
       // existingProducts.splice(productIndex, 1);
       // // this.#writeFile(existingProducts);
   }

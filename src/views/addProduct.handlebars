@@ -1,4 +1,4 @@
-    <form action="/api/products" method="POST">
+    <form action="/api/view/create" method="POST">
     <input type="text" name="title" placeholder="Nome do produto" required><br>
     <input type="text" name="description" placeholder="Descrição" required><br>
     <input type="number" name="price" placeholder="Preço" required><br>
@@ -10,12 +10,15 @@
     </form>
 
     <script>
+        const productsModel = require("../database/models/products.model");
         const codeId = document.getElementById("code");
+        codeId.value = undefined;
 
         codeId.addEventListener("input", async () => {
-            const code = codeId.value;
+            const code = codeId.value
+
             try {
-                const response = await fetch(`/api/products/${code}`);
+                const response = await fetch(`/api/view/create/${code}`);
                 const product = await response.json();
                 if (!product) {
                     alert("Código não existe");
@@ -23,6 +26,5 @@
             } catch (error) {
                 console.log(error);
             }
-
         });
     </script>

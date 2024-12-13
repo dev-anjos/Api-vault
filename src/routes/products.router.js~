@@ -11,6 +11,13 @@ const router = express.Router();
 router.use(express.json())
 router.use(express.urlencoded({ extended: true }))
 
+
+//rota de view
+router.get('/messages', async (req, res) => {
+
+    res.render("chat", { messages });
+});
+
 router.get('/', async (req, res) => {
     const limit = req.query.limit;
     

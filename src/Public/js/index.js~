@@ -27,7 +27,7 @@ function sendMessage() {
     if (inputMessage.value && inputUsername.value) {
         // Envia o nome e a mensagem ao servidor
 
-        socket.emit('chat message', inputUsername.value , inputMessage.value);
+        socket.emit('chat message', `${inputUsername.value}` + ':' + `${inputMessage.value}`);
         inputMessage.value = ''; // Limpa o campo de entrada
     }
 }

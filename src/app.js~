@@ -54,11 +54,14 @@ socketServer.on('connection', socket => {
         socketServer.emit('refreshProducts', newProduct);
     })
 
-     socket.on('chat message', async (user, msg) => {
+     socket.on('chat message', (user, msg) => {
          console.log(user,msg)
          await messagesModel.create({
-             user: user,
-             message: msg
+             // id: lastProductId + 1,
+             title, description,
+             price, thumbnail: thumbnail || [],
+             code, stock,
+             status, category,
          });
 
         socketServer.emit('chat message',  `${user}: ${msg}`);

@@ -48,7 +48,7 @@ router.get('/:cid',  async (req, res) => {
     }
 
     try {
-        const cart = await newCartManager.getCart(cid);
+        const cart = await newCartManager.getCart(parseInt(cid));
         res.json(cart);
     } catch (error) {
         res.json({ error: error.message });
