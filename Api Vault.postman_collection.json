@@ -30,7 +30,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/carts/1",
+									"raw": "http://localhost:8080/api/carts/675a3f320989c7f71ca9c5ed",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -39,7 +39,7 @@
 									"path": [
 										"api",
 										"carts",
-										"1"
+										"675a3f320989c7f71ca9c5ed"
 									]
 								}
 							},
@@ -57,7 +57,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n  \"pid\":  2,\r\n  \"quantity\": 2\r\n}",
+									"raw": "{\r\n    \"pid\": \"67511ab485535f8ca4380e8c\",\r\n    \"quantity\": 3\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -86,7 +86,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"quantity\": 2\r\n}",
+									"raw": "{\r\n    \"quantity\": 1\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -94,7 +94,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/carts/1/product/3",
+									"raw": "http://localhost:8080/api/carts/675a3f5a0989c7f71ca9c5f0/product/67510f0366b080f27a754dd3",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -103,9 +103,9 @@
 									"path": [
 										"api",
 										"carts",
-										"1",
+										"675a3f5a0989c7f71ca9c5f0",
 										"product",
-										"3"
+										"67510f0366b080f27a754dd3"
 									]
 								}
 							},
@@ -127,7 +127,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/api/products/1",
+									"raw": "http://localhost:8080/api/products/675513e239c862d9c70d384c",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -136,7 +136,7 @@
 									"path": [
 										"api",
 										"products",
-										"1"
+										"675513e239c862d9c70d384c"
 									]
 								}
 							},
@@ -165,7 +165,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/products/1",
+									"raw": "http://localhost:8080/api/products/67511ab485535f8ca4380e8c",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -174,7 +174,7 @@
 									"path": [
 										"api",
 										"products",
-										"1"
+										"67511ab485535f8ca4380e8c"
 									]
 								}
 							},
@@ -198,7 +198,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/products",
+									"raw": "http://localhost:8080/api/products/",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -206,7 +206,8 @@
 									"port": "8080",
 									"path": [
 										"api",
-										"products"
+										"products",
+										""
 									]
 								}
 							},
@@ -224,7 +225,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"title\":  \"Rx 570\",\r\n    \"description\": \"RX570 4gb\",\r\n    \"price\": 500,\r\n    \"thumbnail\": [\r\n        \"foto12\",\r\n        \"teste\"\r\n    ],\r\n    \"code\": \"12\",\r\n    \"stock\": 10,\r\n    \"category\": \"Tecnologia\"\r\n\r\n}",
+									"raw": "{\r\n    \"title\":  \"Teclado Akko 5075B\",\r\n    \"description\": \"Teclado gamer, mencanico\",\r\n    \"price\": 1000,\r\n    \"thumbnail\": [\r\n        \"teste\",\r\n        \"teste1\"\r\n    ],\r\n    \"code\": \"539\",\r\n    \"stock\": 90,\r\n    \"category\": \"Tecnologia\",\r\n    \"status\": true\r\n    \r\n\r\n\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -232,7 +233,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/products",
+									"raw": "http://localhost:8080/api/products/",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -240,7 +241,8 @@
 									"port": "8080",
 									"path": [
 										"api",
-										"products"
+										"products",
+										""
 									]
 								}
 							},
@@ -258,7 +260,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"title\": \"placa de video\",\r\n    \"description\": \"RX570 4gb\",\r\n    \"price\": 500,\r\n    \"thumbnail\": [\r\n        \"foto12\",\r\n        \"teste1\"\r\n    ],\r\n    \"code\": \"12\",\r\n    \"stock\": 10,\r\n    \"category\": \"Tecnologia\"\r\n\r\n}",
+									"raw": "{\r\n    \"title\": \"placa de video\",\r\n    \"description\": \"RX570 4gb\",\r\n    \"price\": 1060,\r\n    \"thumbnail\": [\r\n        \"polinpoloso\",\r\n        \"teste1\"\r\n    ],\r\n    \"code\": \"14\",\r\n    \"stock\": 10,\r\n    \"category\": \"Tecnologia\"\r\n\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -266,7 +268,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/products/1",
+									"raw": "http://localhost:8080/api/products/675646f60d7100ef7e241d75",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -275,7 +277,7 @@
 									"path": [
 										"api",
 										"products",
-										"1"
+										"675646f60d7100ef7e241d75"
 									]
 								}
 							},
