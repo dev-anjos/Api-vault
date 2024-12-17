@@ -46,10 +46,18 @@ router.get('/realtimeproducts', async (req, res) => {
     res.render("realTimeProducts", { products });
 });
 
+
+
 //rota de view
 router.get('/messages', async (req, res) => {
 
     res.render("chat", {title: 'Home'});
+});
+
+//rota de view
+router.get('/products', async (req, res) => {
+    const products = await pm.getProducts();
+    res.render("realTimeProducts", { products });
 });
 
 

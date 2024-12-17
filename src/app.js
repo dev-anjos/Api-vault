@@ -13,7 +13,7 @@ const app = express();
 const server = http.createServer(app)
 const socketServer = new Server(server)
 const messagesModel = require('./database/models/messages.model');
-const productsModel = require("./database/models/products.model");
+
 
 // configura para interpretar solicitações com dados codificados no formato URL
 app.use(express.json())
@@ -49,7 +49,7 @@ socketServer.on('connection', socket => {
 
     socket.on('newProduct' , (newProduct) => {
                     
-        const productsUpdated = data;
+        // const productsUpdated = data;
 
         socketServer.emit('refreshProducts', newProduct);
     })

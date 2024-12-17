@@ -12,22 +12,30 @@ router.use(express.json())
 router.use(express.urlencoded({ extended: true }))
 
 router.get('/', async (req, res) => {
-    const limit = req.query.limit;
-    
-    try {
+    const limit = req.query.limit || 10;
+    const page = req.query.page || 1;
+    const sort = req.query.sort;
+    const filter = req.query.query ? { category: req.query.query.toUpperCase() } : {}; 
 
-        pm.getProducts().then(products => {
-            if (limit) {
-                const limitedProducts = products.slice(0, limit);
-                res.json(limitedProducts);
-            } else {
-                res.json(products);
-            }
-        })
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    try {
+        const products = await productsModel.paginate(filter, { page, limit, sort });
+        const resposta = {
+            status: 'success',
+            payload: products.docs,
+            totalPages: products.totalPages,
+            prevPage: products.prevPage ? products.prevPage : false,
+            nextPage: products.nextPage ? products.nextPage : false,
+            page: products.page,
+            hasNexTPage: products.hasNextPage ? products.hasNextPage : false,
+            hasPrevPage: products.hasPrevPage ? products.hasPrevPage : false,
+            prevLink: products.prevLink,
+            nextLink: products.hasNextPage ? `/api/products?page=${products.nextPage}` : null,
+        }
+        res.json(resposta);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
-})  
+});
 
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
@@ -103,7 +111,7 @@ router.delete('/:id', async (req, res) => {
         if (!productId) {
             return res.status(404).json({ error: "O produto com o ID informado não foi encontrado." });
         }
-        pm.deleteProduct(id);
+        await pm.deleteProduct(id);
         res.status(204).send();
     } catch (error) {
         res.json({ error: error.message });
