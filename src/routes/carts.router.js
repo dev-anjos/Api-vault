@@ -55,4 +55,22 @@ router.get('/:cid',  async (req, res) => {
     }
 })
 
+router.delete('/:cid', async (req, res) => {
+    const { cid } = req.params;
+
+    if (!isValidObjectId(cid)) {
+        return res.status(400).json({ error: 'Formato CID inválido' });
+    }
+
+    try {
+        await newCartManager.deleteCart(cid);
+        res.status(204).send();
+    } catch (error) {
+        res.json({ error: error.message });
+    }
+
+
+})
+
+
 module.exports = router;

@@ -3,7 +3,8 @@ const productsRouter = require('./routes/products.router');
 const cartsRouter = require('./routes/carts.router');
 const viewRouter = require('./routes/view.router');
 const handlebars = require('express-handlebars');  
-const  {Server} = require('socket.io') 
+const  {Server} = require('socket.io')
+
 const mongoose = require('mongoose');
 const http = require('http');
 const path = require("path");
@@ -19,7 +20,12 @@ const messagesModel = require('./database/models/messages.model');
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.engine('handlebars', handlebars.engine());
+app.engine('handlebars', handlebars.engine({
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+        allowProtoMethodsByDefault: true,
+    },
+}));
 app.set('view engine', 'handlebars');
 app.set('views',path.join(__dirname, '/views'));
 
@@ -64,6 +70,12 @@ socketServer.on('connection', socket => {
         socketServer.emit('chat message',  `${user}: ${msg}`);
 
     });
+
+    socket.on("updateCart", (newCart) => {
+        console.log("Carrinho atualizado:", newCart);
+        socketServer.emit("refreshCart", newCart);
+    });
+
 
     socket.on('disconnect', () => {
         console.log('Usuário desconectado');

@@ -1,11 +1,11 @@
-const fs = require('fs');
+// const fs = require('fs');
 const cartsModel = require('../database/models/carts.model');
 
 
 class CartManager{
     constructor(){
-        this.path = "src/data/fileSystem/products.json";
-        this.id = 1;
+        // this.path = "src/data/fileSystem/products.json";
+        // this.id = 1;
     }
 
     // Método privado para leitura do arquivo
@@ -33,7 +33,7 @@ class CartManager{
     async createCart(pid, quantity) {
 
         try {
-            await cartsModel.create({products: [{product: pid, quantity: quantity}]});
+            return await cartsModel.create({products: [{product: pid, quantity: quantity}]});
         } catch (error) {
             throw new Error(error.message);
         }
@@ -54,9 +54,17 @@ class CartManager{
         }
     }
 
-    async getCart(id) {
+    async getCart(cid) {
         // const existingCarts = this.#readFile();
-        return cartsModel.findById(id).lean();
+        return cartsModel.findById(cid).lean();
+    }
+
+    async deleteCart(cid) {
+        try {
+            await cartsModel.findByIdAndDelete(cid);
+        } catch (error) {
+            throw new Error(error.message);
+        }
     }
 }
 

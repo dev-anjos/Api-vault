@@ -1,16 +1,30 @@
-    <form action="/api/view/create" method="POST">
-    <input type="text" name="title" placeholder="Nome do produto" required><br>
-    <input type="text" name="description" placeholder="Descrição" required><br>
-    <input type="number" name="price" placeholder="Preço" required><br>
-    <input type="text" name="code" id="code" placeholder="Codigo" required><br>
-    <input type="number" name="stock" placeholder="Estoque" required><br>
-    <input type="text" name="category" placeholder="Categoria" required><br><br>
+    <div class="container-form">
 
-    <button type="submit" >Adicionar produto</button>
-    </form>
+        <form action="/api/view/create" method="POST" class="form">
+            <label for="title"> Nome do produto</label><br>
+            <input type="text" name="title"  required><br>
+
+            <label for="title"> Descrição</label><br>
+            <input type="text" name="description" placeholder="Descrição" required><br>
+
+            <label for="title"> Preço</label><br>
+            <input type="number" name="price" placeholder="Preço" required><br>
+
+            <label for="title"> Codigo</label><br>
+            <input type="text" name="code" id="code" placeholder="Codigo" required><br>
+
+            <label for="title"> Estoque</label><br>
+            <input type="number" name="stock" placeholder="Estoque" required><br>
+
+            <label for="title"> Categoria</label><br>
+            <input type="text" name="category" placeholder="Categoria" required><br><br>
+
+            <button type="submit" >Adicionar produto</button>
+        </form>
+    </div>
 
     <script>
-        const productsModel = require("../database/models/products.model");
+        {{!-- const productsModel = require("../database/models/products.model");
         const codeId = document.getElementById("code");
         codeId.value = undefined;
 
@@ -26,5 +40,5 @@
             } catch (error) {
                 console.log(error);
             }
-        });
+        }); --}}
     </script>

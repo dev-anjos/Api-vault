@@ -82,13 +82,12 @@ router.put('/:id' ,async (req, res) => {
     const updatedProduct = req.body;
 
     try {
-        const existingProducts = await productsModel.find();
-        const productIndex = existingProducts.findIndex((product) => product._id === parseInt(id));
+        const existingProducts = await productsModel.findByIdAndUpdate(id);
 
-        if ( productIndex === -1) {
-            return res.status(404).json({ error: "Produto não encontrado" });
+        if (!existingProducts) {
+            return res.status(404).json({ error: "O produto com o ID informado não foi encontrado." });
         }
-    
+
         const codeExists = await productsModel.findOne({code: updatedProduct.code})
         if (codeExists	) {
             return res.status(400).json({ error: "Não pode ter dois produtos com o mesmo codigo!" });
@@ -98,7 +97,7 @@ router.put('/:id' ,async (req, res) => {
 
         return res.json(product);
     } catch (error) {
-        res.json({ error: error.message });
+        res. status(500).json({ error: error.message });
     }
 })
 
@@ -106,7 +105,7 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        const productId = mongoose.Types.ObjectId.isValid(id)
+        const productId = await productsModel.findById(id);
 
         if (!productId) {
             return res.status(404).json({ error: "O produto com o ID informado não foi encontrado." });

@@ -1,0 +1,19 @@
+<div class="container">
+    <h1>Carrinho de Compras</h1>
+    <ul class="list-group">
+        {{#each cart}}
+            <li class="list-group-item">
+                <h2>{{this._doc.title}}</h2>
+                <p>Preço: R${{this._doc.price}}</p>
+                <p>Quantidade: {{this.quantity}}</p>
+                <form action="/cart/{{../cartId}}/product/{{this.product._id}}" method="post">
+                    <button name="action" value="increase" type="submit">Aumentar</button>
+                    <button name="action" value="decrease" type="submit">Diminuir</button>
+                    <button name="action" value="remove" type="submit">Remover</button>
+                </form>
+            </li>
+        {{/each}}
+    </ul>
+
+    <a href="/api/view/products">Continuar Comprando</a>
+</div>

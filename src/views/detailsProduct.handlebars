@@ -1,0 +1,12 @@
+
+
+<h1>{{this.title}}</h1>
+<p>Preço: {{this.price}}</p>
+<p>Descrição: {{this.description}}</p>
+<form action="/api/view/addtocart" method="post">
+    <input type="hidden" name="pid" value="{{this.product.id}}">
+    <label>Quantidade: </label>
+    <input type="number" name="quantity" min="1" value="1" required>
+    <button type="submit">Adicionar ao Carrinho</button>
+</form>
+<a href="/api/view/products">Voltar para Produtos</a>

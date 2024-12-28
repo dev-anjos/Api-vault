@@ -25,20 +25,19 @@ function sendMessage() {
     const inputUsername = document.getElementById('user');
 
     if (inputMessage.value && inputUsername.value) {
-        // Envia o nome e a mensagem ao servidor
-
         socket.emit('chat message', inputUsername.value , inputMessage.value);
         inputMessage.value = ''; // Limpa o campo de entrada
     }
 }
 
-// Captura o evento de tecla "Enter" no campo de entrada
 messageInput.addEventListener('keyup', (event) => {
     if (event.key === 'Enter') {
         if (messageInput.value.trim().length > 0) {
-            event.preventDefault(); // Previne a quebra de linha
-            sendMessage(); // Chama a função para enviar a mensagem
+            event.preventDefault();
+            sendMessage();
         }
     }
 });
+
+
 

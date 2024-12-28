@@ -80,12 +80,12 @@ class ProductManager {
 
 
   async updateProduct(id, updatedProduct) {
-    await productsModel.findByIdAndUpdate(
-      { _id: id },
-      { $set: updatedProduct },
-      { new: true }
+    return productsModel.findByIdAndUpdate(
+        {_id: id},
+        {$set: updatedProduct},
+        {new: true}
     );
-    return product;
+
   }
 
   // async updateProduct(title, updatedProduct) {
@@ -119,7 +119,7 @@ class ProductManager {
 
     const product = await productsModel.findById(id);
     if (!product) {
-      throw new Error("Produto não encontrado.");
+      return { error: "Produto não encontrado." };
     }
     return product;
   }
