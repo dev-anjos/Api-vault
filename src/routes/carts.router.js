@@ -29,7 +29,7 @@ router.post('/:cid/product/:pid',validateParams ,async (req, res) => {
     const objectId = new mongoose.Types.ObjectId(cid);
     const existingCarts = await cartsModel.findById(objectId)
     if (!existingCarts){
-        res.status(404).json({ error: "Carrinho não encontrado" });
+        return res.status(404).json({ error: "Carrinho não encontrado" });
     }
 
     try {
@@ -57,6 +57,11 @@ router.get('/:cid',  async (req, res) => {
 
 router.delete('/:cid', async (req, res) => {
     const { cid } = req.params;
+
+    const findCart = await cartsModel.findById(cid)
+    if (!findCart){
+        return res.status(404).json({ error: "Carrinho não encontrado" });
+    }
 
     if (!isValidObjectId(cid)) {
         return res.status(400).json({ error: 'Formato CID inválido' });

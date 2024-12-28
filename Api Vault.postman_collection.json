@@ -112,6 +112,31 @@
 							"response": []
 						}
 					]
+				},
+				{
+					"name": "DELETE",
+					"item": [
+						{
+							"name": "Deletar carrinho",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/api/",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		},
@@ -198,7 +223,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/products/",
+									"raw": "http://localhost:8080/api/products/?page=1",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -208,6 +233,12 @@
 										"api",
 										"products",
 										""
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
 									]
 								}
 							},
@@ -225,7 +256,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"title\":  \"Teclado Akko 5075B\",\r\n    \"description\": \"Teclado gamer, mencanico\",\r\n    \"price\": 1000,\r\n    \"thumbnail\": [\r\n        \"teste\",\r\n        \"teste1\"\r\n    ],\r\n    \"code\": \"539\",\r\n    \"stock\": 90,\r\n    \"category\": \"Tecnologia\",\r\n    \"status\": true\r\n    \r\n\r\n\r\n}",
+									"raw": "{\r\n    \"title\":  \"Teclado Akko 5075B\",\r\n    \"description\": \"Teclado gamer, mencanico\",\r\n    \"price\": 1000,\r\n    \"thumbnail\": [\r\n        \"teste\",\r\n        \"teste1\"\r\n    ],\r\n    \"code\": \"5000\",\r\n    \"stock\": 90,\r\n    \"category\": \"Home Office\",\r\n    \"status\": true\r\n    \r\n\r\n\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -254,7 +285,7 @@
 					"name": "PUT",
 					"item": [
 						{
-							"name": "Modificar produto Copy",
+							"name": "Modificar produto",
 							"request": {
 								"method": "PUT",
 								"header": [],
