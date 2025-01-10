@@ -66,6 +66,58 @@ class CartManager{
             throw new Error(error.message);
         }
     }
+
+    async removeProductFromCart (cid, pid) {
+        try {
+            await cartsModel.findOneAndUpdate(
+                { _id: cid },
+                { $pull: { products: { product: pid } } }
+            );
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+    async decreaseProductQuantity(cid, pid) {
+
+        try {
+            const result = await cartsModel.findOneAndUpdate(
+                { _id: cid, "products.product": pid },
+                { $inc: { "products.$.quantity": -1 } },
+                { new: true }
+            );
+
+            if (!result) {
+                return new Error('Cart or Product not found');
+            }
+
+            return result;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
+
+    async increaseProductQuantity(cid, pid) {
+
+        try {
+            const result = await cartsModel.findOneAndUpdate(
+                { _id: cid, "products.product": pid },
+                { $inc: { "products.$.quantity": +1 } },
+                { new: true }
+            );
+
+            if (!result) {
+                return new Error('Cart or Product not found');
+            }
+
+            return result;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
+
 }
+
 
 module.exports = CartManager

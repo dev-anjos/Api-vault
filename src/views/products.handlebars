@@ -1,7 +1,8 @@
 <div class="container">
-    <h1>Produtos</h1>
-    <button onclick="location.href='/api/view/addproduct'">Adicionar Produto</button>
-    <button onclick="location.href='/api/view/cart'">Ver Carrinho</button>
+
+        <h1>Produtos</h1>
+        <button onclick="location.href='/api/view/addproduct'">Adicionar Produto</button>
+        <button onclick="location.href='/api/view/cart/{{cartId}}'">Ver Carrinho</button>
 
     <h2>Lista de produtos</h2>
     <ul class="list-group">
@@ -12,8 +13,8 @@
                     <img>Foto do produto em processo..</img>
                     <p>Descrição: {{description}}</p>
                     <p>Preço: R${{price}}</p>
-<!--                    <p>Categoria: {{category}}</p>-->
-<!--                    <p>Estoque: {{stock}}</p>-->
+                    <p>Categoria: {{category}}</p>
+                    <p>Estoque: {{stock}}</p>
                 </li>
 
                 <div>
@@ -24,13 +25,19 @@
     </ul>
 
 
-        <button onclick="location.href='{{this.prevLink}}'">Anterior</button>
+        <div class="footer">
 
-        <button onclick="location.href='{{this.nextLink}}'">Proximo</button>
+            <div class="nextpage">
+                <button onclick="location.href='{{this.prevLink}}'"><<</button><br>
+
+                <button onclick="location.href='{{this.nextLink}}'"> >> </button>
+
+            </div>
 
 
-        <div>
-            Página {{this.page}} de {{this.totalPages}}
+            <div>
+                Página {{this.page}} de {{this.totalPages}}
+            </div>
         </div>
 
 </div>

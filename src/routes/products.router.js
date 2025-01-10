@@ -7,7 +7,6 @@ const productsModel = require('../database/models/products.model');
 const pm = new productManager
 const router = express.Router();
 
-
 router.use(express.json())
 router.use(express.urlencoded({ extended: true }))
 

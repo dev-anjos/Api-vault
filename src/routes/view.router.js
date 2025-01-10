@@ -1,11 +1,9 @@
 const express = require('express');
 const productManager = require("../controllers/produtcs.controller");
 const cartManager = require("../controllers/carts.controller");
-const cartsModel = require("../database/models/carts.model");
-const validateProductBody = require("../middleware/products.middleware");
 const productsModel = require("../database/models/products.model");
-const {validateCart} = require("../middleware/carts.middleware");
 const router = express.Router();
+const {validateCart} = require("../middleware/carts.middleware");
 const pm = new productManager
 const cm = new cartManager
 
@@ -49,6 +47,7 @@ router.get('/products', async (req, res) => {
     const page = req.query.page || 1;
     const sort = req.query.sort;
     const filter = req.query.query ? { category: req.query.query.toUpperCase() } : {};
+    const cartId = req.session.cartId
 
     try {
         const products = await productsModel.paginate(filter, { page, limit, sort });
@@ -72,7 +71,8 @@ router.get('/products', async (req, res) => {
             prevPage: response.prevPage,
             nextPage: response.nextPage,
             page: response.page,
-            totalPages: response.totalPages
+            totalPages: response.totalPages,
+            cartId: cartId
         } );
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -104,7 +104,10 @@ router.get('/detailsProduct/:id', async (req, res) => {
 // Rotas carrinho
 router.get('/cart/:cid', async (req, res) => {
     const { cid } = req.params;
-    const cart = await cm.getCart(cid);
+
+    const currentCartId = req.session.cartId = cid
+
+    const cart = await cm.getCart(currentCartId);
     const productIds = cart.products.map((product) => product.product.toString());
     const products = await Promise.all(productIds.map((id) => pm.getProductById(id)));
 
@@ -113,20 +116,68 @@ router.get('/cart/:cid', async (req, res) => {
         return { ...product, quantity: cartProduct.quantity };
     });
 
-    res.render("cart", { cartId: cid, cart: cartProducts });
+    res.render("cart", { cartId: currentCartId, cart: cartProducts });
 })
 
 router.post('/addtocart', validateCart ,async (req, res) => {
     const {pid, quantity} = req.body;
 
     try {
-        const newCart = await cm.createCart(pid,parseInt(quantity));
-        const io = req.app.socketServer;
-        if (io) { io.emit('updateCart' , newCart)}
-        res.redirect("cart/" + newCart._id);
+        let currentCartId = req.session.cartId
+
+        if (!currentCartId) {
+            const newCart = await cm.createCart(pid,parseInt(quantity));
+            currentCartId = req.session.cartId = newCart._id;
+        }
+
+        // const newCart = await cm.createCart(pid,parseInt(quantity));
+        // const io = req.app.socketServer;
+        // if (io) { io.emit('updateCart' , newCart)}
+
+        await cm.addProductToCart(req.session.cartId, pid, parseInt(quantity));
+
+        res.redirect("cart/" + currentCartId);
     } catch (error) {
         res.json('error ao criar carrinho: ' + error.message);
     }
 })
+
+router.post('/removeFromCart/:cid' , async (req, res) => {
+    const { pid } = req.body;
+    const { cid } = req.params;
+
+    try {
+
+        await cm.removeProductFromCart(cid, pid);
+        res.redirect(`/api/view/cart/${cid}`);
+    } catch (error) {
+        res.json('error ao deletar item do carrinho: ' + error.message);
+    }
+})
+
+
+router.post("/decreaseQuantity/:cid" , async (req, res) => {
+    const { pid } = req.body;
+    const { cid } = req.params;
+
+    try {
+        await cm.decreaseProductQuantity(cid, pid);
+        res.redirect(`/api/view/cart/${req.session.cartId}`);
+    } catch (error) {
+        res.json('error ao diminuir item do carrinho: ' + error.message);
+    }
+} )
+
+router.post("/increaseQuantity/:cid" , async (req, res) => {
+    const { pid } = req.body;
+    const { cid } = req.params;
+
+    try {
+        await cm.increaseProductQuantity(cid, pid);
+        res.redirect(`/api/view/cart/${req.session.cartId}`);
+    } catch (error) {
+        res.json('error ao aumentar item do carrinho: ' + error.message);
+    }
+} )
 
 module.exports = router;

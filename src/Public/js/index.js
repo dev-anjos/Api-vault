@@ -1,6 +1,5 @@
 const socket = io();
 
-
 socket.on("connect", () => {
     console.log("Conectado ao servidor");
 })
@@ -38,6 +37,3 @@ messageInput.addEventListener('keyup', (event) => {
         }
     }
 });
-
-
-

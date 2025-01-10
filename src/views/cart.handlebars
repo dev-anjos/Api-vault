@@ -5,15 +5,50 @@
             <li class="list-group-item">
                 <h2>{{this._doc.title}}</h2>
                 <p>Preço: R${{this._doc.price}}</p>
-                <p>Quantidade: {{this.quantity}}</p>
-                <form action="/cart/{{../cartId}}/product/{{this.product._id}}" method="post">
-                    <button name="action" value="increase" type="submit">Aumentar</button>
-                    <button name="action" value="decrease" type="submit">Diminuir</button>
-                    <button name="action" value="remove" type="submit">Remover</button>
-                </form>
+                <p id="quantity">Quantidade: {{this.quantity}}</p>
+
+                <div class="formQuantity">
+                    <form action="/api/view/increaseQuantity/{{../cartId}}" method="post" class="increase">
+                        <input type="hidden" name="pid" value="{{this._doc._id}}">
+                        <button
+                                name="action"
+                                value="increase"
+                                type="submit"
+                        >+</button>
+                    </form>
+
+                    <form action="/api/view/decreaseQuantity/{{../cartId}}" method="post" class="decrease">
+                        <input type="hidden" name="pid" value="{{this._doc._id}}">
+                        <button
+                                id="decrease-{{this._doc._id}}"
+                                name="action"
+                                value="decrease"
+                                type="submit"
+                                onclick="quantityProduct('{{this.quantity}}', '{{this._doc._id}}')"
+                        >-</button>
+                    </form>
+                    <form action="/api/view/removeFromCart/{{../cartId}}" method="post">
+                        <input type="hidden" name="pid" value="{{this._doc._id}}">
+                        <button name="action" value="remove" type="submit">Remover</button>
+                    </form>
+                </div>
             </li>
         {{/each}}
+
     </ul>
 
-    <a href="/api/view/products">Continuar Comprando</a>
+    <a href="/api/view/products/">Continuar Comprando</a>
 </div>
+
+<script>
+    function quantityProduct(quantity, productId) {
+        const qty = parseInt(quantity);
+        if (isNaN(qty) || qty < 0) {
+            document.getElementById(`decrease-${productId}`).disabled = true;
+        } else if (qty <= 1) {
+            document.getElementById(`decrease-${productId}`).disabled = true;
+        } else {
+            document.getElementById(`decrease-${productId}`).disabled = false;
+        }
+    }
+</script>

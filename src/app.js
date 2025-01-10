@@ -1,7 +1,9 @@
 const express = require("express");
 const productsRouter = require('./routes/products.router');
 const cartsRouter = require('./routes/carts.router');
+const messagesModel = require('./database/models/messages.model');
 const viewRouter = require('./routes/view.router');
+
 const handlebars = require('express-handlebars');  
 const  {Server} = require('socket.io')
 
@@ -13,12 +15,20 @@ const port = 8080
 const app = express();
 const server = http.createServer(app)
 const socketServer = new Server(server)
-const messagesModel = require('./database/models/messages.model');
+const session = require('express-session');
+
 
 
 // configura para interpretar solicitações com dados codificados no formato URL
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+app.use(session({
+    secret: 'sua-chave-secreta',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
 
 app.engine('handlebars', handlebars.engine({
     runtimeOptions: {
