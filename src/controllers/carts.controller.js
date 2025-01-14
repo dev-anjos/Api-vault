@@ -97,7 +97,6 @@ class CartManager{
         }
     }
 
-
     async increaseProductQuantity(cid, pid) {
 
         try {
@@ -117,6 +116,19 @@ class CartManager{
         }
     }
 
+    async updateProductToCart(cid, pid, quantity) {
+
+        try {
+            return await cartsModel.findOneAndUpdate(
+                { _id: cid, "products.product": pid },
+                { $set: { "products.$.quantity": quantity } },
+                { new: true }
+            );
+
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
 }
 
 

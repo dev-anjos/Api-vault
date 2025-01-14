@@ -55,6 +55,30 @@ router.get('/:cid',  async (req, res) => {
     }
 })
 
+router.put('/:cid/product/:pid' ,async (req, res) => {
+
+    const {cid, pid} = req.params;
+    const {quantity} = req.body;
+
+    const objectId = new mongoose.Types.ObjectId(cid);
+    const existingCarts = await cartsModel.findById(objectId)
+    if (!existingCarts){
+        return res.status(404).json({ error: "Carrinho não encontrado" });
+    }
+
+    if (!existingCarts.products.find((product) => product.product.toString() === pid)) {
+        return res.status(400).json({ error: "Produto nao encontrado" });
+    }
+
+    try {
+        const newCart = await newCartManager.updateProductToCart(cid,pid, quantity);
+        res.status(201).json(newCart);
+    } catch (error) {
+        res.json('error ao adicionar produto: ' + error.message);
+    }
+})
+
+
 router.delete('/:cid', async (req, res) => {
     const { cid } = req.params;
 
@@ -73,6 +97,7 @@ router.delete('/:cid', async (req, res) => {
     } catch (error) {
         res.json({ error: error.message });
     }
+
 
 
 })

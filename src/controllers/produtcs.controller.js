@@ -51,30 +51,15 @@ class ProductManager {
       // const existingProducts = this.#readFile();
       try {
 
-        // some = caso a condicao a direita seja verdadeira retorna true e cai no if
-  
-          //calcula o indice do ultimo id utilizando o legnth -1  e acessa o id, na consta e adicionado +1 ao id calculado
-          //                     se true                         faz isso
-          // const lastProductId = existingProducts.length > 0
-          //     ? existingProducts[existingProducts.length - 1].id
-          //     : 0;
-            
-          // const existingProducts = await productsModel.find();
-           
-          const newProduct = await productsModel.create({
-            // id: lastProductId + 1,
+          return await productsModel.create({
             title, description,
             price, thumbnail: thumbnail || [],
             code, stock,
             status, category,
           });
-  
-          // existingProducts.push(newProduct);
-          // this.#writeFile(existingProducts)
-          console.log('Produtos salvos com sucesso!');
-        
+
       } catch (error) {
-        console.log(error);
+        res.status(500).json({ error: error.message });
       }  
     }
 
@@ -117,11 +102,8 @@ class ProductManager {
     // const existingProducts = await productsModel.find();
     // const product = existingProducts.find((product) => product._id== id);
 
-    const product = await productsModel.findById(id);
-    if (!product) {
-      return { error: "Produto não encontrado." };
-    }
-    return product;
+    return productsModel.findById(id);
+
   }
 
   // getProductById(id) {
