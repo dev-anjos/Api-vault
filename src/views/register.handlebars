@@ -1,0 +1,24 @@
+<div class="text-center container-form">
+    <form class="form-signin" action="/api/user/register" method="post">
+        <h1 class="h3 mb-3 font-weight-normal">Cadastro</h1>
+
+        <label for="firstName" class="sr-only">Nome</label>
+        <input type="text" name="firstName" id="firstName" class="form-control mt-2" placeholder="Seu nome" required autofocus>
+
+        <label for="lastName" class="sr-only">Sobrenome</label>
+        <input type="text" name="lastName" id="lastName" class="form-control mt-2" placeholder="Seu sobrenome" required>
+
+        <label for="email" class="sr-only">Endereço de email</label>
+        <input type="email" name="email" id="email" class="form-control mt-2" placeholder="Seu email" required>
+
+        <label for="password" class="sr-only">Senha</label>
+        <input type="password" name="password" id="password" class="form-control mt-2" placeholder="Senha" required>
+
+        <label for="birthday" class="sr-only">Data de nascimento:</label>
+        <input type="date" name="birthday" id="birthday" class="form-control mt-2" placeholder="Data de nascimento" required>
+
+        <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">Cadastrar</button>
+
+        <p class="mt-5 mb-3 text-muted"><a href="/api/view/">Voltar para a Home</a></p>
+    </form>
+</div>

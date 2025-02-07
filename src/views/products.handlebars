@@ -1,39 +1,41 @@
 <div class="container">
 
         <h1>Produtos</h1>
-        <button onclick="location.href='/api/view/addproduct'">Adicionar Produto</button>
-        <button onclick="location.href='/api/view/cart/{{cartId}}'">Ver Carrinho</button>
+        <div class="text-center">
+            <button onclick="location.href='/api/user/profile'" class=" btn btn-primary mr-2">Perfil</button>
+            <button onclick="location.href='/api/session/logout'" class=" btn btn-primary mr-2">Sair</button>
+            <button onclick="location.href='/api/view/addproduct'" class=" btn btn-primary mr-2">Adicionar Produto</button>
+            <button onclick="location.href='/api/view/cart/{{cartId}}'" id="cartId" class=" btn btn-primary">Ver Carrinho</button>
+        </div>
 
     <h2>Lista de produtos</h2>
-    <ul class="list-group">
+    <div class="row">
     {{#each products}}
-            <div class=" list-group-item">
-                <li>
-                    <h2>Nome: {{this.title}}</h2>
-                    <img>Foto do produto em processo..</img>
-                    <p>Descrição: {{description}}</p>
-                    <p>Preço: R${{price}}</p>
-                    <p>Categoria: {{category}}</p>
-                    <p>Estoque: {{stock}}</p>
-                </li>
-
-                <div>
-                    <button onclick="location.href='/api/view/detailsProduct/{{this._id}}'"> Ver Detalhes</button>
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <img src="https://picsum.photos/200" class="card-img-top" alt="Imagem do produto">
+                <div class="card-body">
+                    <h5 class="card-title">{{this.title}}</h5>
+                    <p class="card-text">{{description}}</p>
+                    <p class="card-text">Pre o: R${{price}}</p>
+                    <p class="card-text">Categoria: {{category}}</p>
+                    <p class="card-text">Estoque: {{stock}}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="location.href='/api/view/detailsProduct/{{this._id}}'">Ver Detalhes</button>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
     {{/each}}
-    </ul>
-
+    </div>
 
         <div class="footer">
-
             <div class="nextpage">
                 <button onclick="location.href='{{this.prevLink}}'"><<</button><br>
-
                 <button onclick="location.href='{{this.nextLink}}'"> >> </button>
-
             </div>
-
 
             <div>
                 Página {{this.page}} de {{this.totalPages}}
@@ -41,3 +43,4 @@
         </div>
 
 </div>
+

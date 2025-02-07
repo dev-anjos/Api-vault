@@ -9,7 +9,14 @@ const cm = new cartManager
 
 //rota de view
 router.get('/addproduct', async (req, res) => {
-    res.render("addProduct", );
+   console.log()
+
+    if (req.session.user.role !== 'admin') {
+       const messages = req.session.messages = "Acesso negado! Espaço destinados a Admin."
+       res.render('forbidden', {messages})
+   }else{
+       res.render("addProduct", );
+   }
 });
 
 router.post('/create',async (req, res) => {
@@ -49,6 +56,10 @@ router.get('/products', async (req, res) => {
     const filter = req.query.query ? { category: req.query.query.toUpperCase() } : {};
     const cartId = req.session.cartId
 
+    if (!req.session.user) {
+        const messages = req.session.messages = "Acesso negado! Verifique seu você possui acesso a essa pagina ou está logado"
+        return res.render('forbidden' , { messages: messages});
+    }
     try {
         const products = await productsModel.paginate(filter, { page, limit, sort });
         const response = {
@@ -105,18 +116,28 @@ router.get('/detailsProduct/:id', async (req, res) => {
 router.get('/cart/:cid', async (req, res) => {
     const { cid } = req.params;
 
-    const currentCartId = req.session.cartId = cid
+    console.log("Aqui")
 
-    const cart = await cm.getCart(currentCartId);
-    const productIds = cart.products.map((product) => product.product.toString());
-    const products = await Promise.all(productIds.map((id) => pm.getProductById(id)));
+    if (!cid) {
+        res.send("Carrinho não encontrado");
+    }else {
+        const currentCartId = req.session.cartId = cid
 
-    const cartProducts = cart.products.map((cartProduct) => {
-        const product = products.find((p) => p._id.toString() === cartProduct.product.toString());
-        return { ...product, quantity: cartProduct.quantity };
-    });
+        const cart = await cm.getCart(currentCartId);
+        const productIds = cart.products.map((product) => product.product.toString());
+        const products = await Promise.all(productIds.map((id) => pm.getProductById(id)));
 
-    res.render("cart", { cartId: currentCartId, cart: cartProducts });
+        const cartProducts = cart.products.map((cartProduct) => {
+            const product = products.find((p) => p._id.toString() === cartProduct.product.toString());
+            return { ...product, quantity: cartProduct.quantity };
+        });
+
+        res.render("cart", { cartId: currentCartId, cart: cartProducts });
+    }
+
+
+
+
 })
 
 router.post('/addtocart', validateCart ,async (req, res) => {
@@ -179,5 +200,24 @@ router.post("/increaseQuantity/:cid" , async (req, res) => {
         res.json('error ao aumentar item do carrinho: ' + error.message);
     }
 } )
+
+//user
+router.get('/', async (req, res) => {
+    res.render("index");
+})
+
+router.get('/login', async (req, res) => {
+    res.render("login");
+})
+
+router.get('/register', (req, res) => {
+    res.render('register');
+});
+
+router.get('/forbidden', (req, res) => {
+    console.log("failed Strategy");
+    const messages = req.session.messages || [];
+    res.render('forbidden', {messages });
+});
 
 module.exports = router;

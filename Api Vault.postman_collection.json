@@ -30,7 +30,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/carts/675a3f320989c7f71ca9c5ed",
+									"raw": "http://localhost:8080/api/carts/67815d54f831e5e56c3d32a6",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -39,7 +39,7 @@
 									"path": [
 										"api",
 										"carts",
-										"675a3f320989c7f71ca9c5ed"
+										"67815d54f831e5e56c3d32a6"
 									]
 								}
 							},
@@ -86,7 +86,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"quantity\": 1\r\n}",
+									"raw": "{\r\n    \"quantity\": 10\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -94,7 +94,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/carts/675a3f5a0989c7f71ca9c5f0/product/67510f0366b080f27a754dd3",
+									"raw": "http://localhost:8080/api/carts/67815d54f831e5e56c3d32a6/product/67815e84f831e5e56c3d32b5",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -103,9 +103,9 @@
 									"path": [
 										"api",
 										"carts",
-										"675a3f5a0989c7f71ca9c5f0",
+										"67815d54f831e5e56c3d32a6",
 										"product",
-										"67510f0366b080f27a754dd3"
+										"67815e84f831e5e56c3d32b5"
 									]
 								}
 							},
@@ -122,7 +122,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/api/",
+									"raw": "http://localhost:8080/api/carts/6786d369dcc1452fd68e8207",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -130,7 +130,45 @@
 									"port": "8080",
 									"path": [
 										"api",
-										""
+										"carts",
+										"6786d369dcc1452fd68e8207"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PUT",
+					"item": [
+						{
+							"name": "Atualizar quantidade de produto",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"quantity\": 25\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://localhost:8080/api/carts/67815d54f831e5e56c3d32a6/product/6762dbac1ae6df3c60a158c5",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"carts",
+										"67815d54f831e5e56c3d32a6",
+										"product",
+										"6762dbac1ae6df3c60a158c5"
 									]
 								}
 							},
@@ -152,7 +190,7 @@
 								"method": "DELETE",
 								"header": [],
 								"url": {
-									"raw": "http://localhost:8080/api/products/675513e239c862d9c70d384c",
+									"raw": "http://localhost:8080/api/products/67857c1c40fd1bfe5bed5ea7",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -161,7 +199,7 @@
 									"path": [
 										"api",
 										"products",
-										"675513e239c862d9c70d384c"
+										"67857c1c40fd1bfe5bed5ea7"
 									]
 								}
 							},
@@ -190,7 +228,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/products/67511ab485535f8ca4380e8c",
+									"raw": "http://localhost:8080/api/products/67815e84f831e5e56c3d32b5",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -199,7 +237,7 @@
 									"path": [
 										"api",
 										"products",
-										"67511ab485535f8ca4380e8c"
+										"67815e84f831e5e56c3d32b5"
 									]
 								}
 							},
@@ -223,7 +261,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/products/?page=1",
+									"raw": "http://localhost:8080/api/products",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -231,14 +269,7 @@
 									"port": "8080",
 									"path": [
 										"api",
-										"products",
-										""
-									],
-									"query": [
-										{
-											"key": "page",
-											"value": "1"
-										}
+										"products"
 									]
 								}
 							},
@@ -256,7 +287,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"title\":  \"Teclado Akko 5075B\",\r\n    \"description\": \"Teclado gamer, mencanico\",\r\n    \"price\": 1000,\r\n    \"thumbnail\": [\r\n        \"teste\",\r\n        \"teste1\"\r\n    ],\r\n    \"code\": \"5000\",\r\n    \"stock\": 90,\r\n    \"category\": \"Home Office\",\r\n    \"status\": true\r\n    \r\n\r\n\r\n}",
+									"raw": "{\r\n    \"title\":  \"Suporte de monitor\",\r\n    \"description\": \"Home office\",\r\n    \"price\": 70,\r\n    \"thumbnail\": [\r\n        \"teste\",\r\n        \"teste1\"\r\n    ],\r\n    \"code\": \"11\",\r\n    \"stock\": 91,\r\n    \"category\": \"Home Office\",\r\n    \"status\": true\r\n    \r\n\r\n\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -291,7 +322,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"title\": \"placa de video\",\r\n    \"description\": \"RX570 4gb\",\r\n    \"price\": 1060,\r\n    \"thumbnail\": [\r\n        \"polinpoloso\",\r\n        \"teste1\"\r\n    ],\r\n    \"code\": \"14\",\r\n    \"stock\": 10,\r\n    \"category\": \"Tecnologia\"\r\n\r\n}",
+									"raw": "{\r\n    \"title\": \"placa de video\",\r\n    \"description\": \"RX570 4gb\",\r\n    \"price\": 1060,\r\n    \"thumbnail\": [\r\n        \"polinpoloso\",\r\n        \"teste1\"\r\n    ],\r\n    \"code\": \"30\",\r\n    \"stock\": 10,\r\n    \"category\": \"Tecnologia\"\r\n\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -299,7 +330,7 @@
 									}
 								},
 								"url": {
-									"raw": "http://localhost:8080/api/products/675646f60d7100ef7e241d75",
+									"raw": "http://localhost:8080/api/products/67815edbf831e5e56c3d32bb",
 									"protocol": "http",
 									"host": [
 										"localhost"
@@ -308,13 +339,78 @@
 									"path": [
 										"api",
 										"products",
-										"675646f60d7100ef7e241d75"
+										"67815edbf831e5e56c3d32bb"
 									]
 								}
 							},
 							"response": []
 						}
 					]
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Registro",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"João\",\r\n  \"lastName\": \"Silva\",\r\n  \"email\": \"joao.silva@example.com\",\r\n  \"password\": \"minhasenha123\",\r\n  \"birthday\": \"2001/04/01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"João\",\r\n  \"lastName\": \"Silva\",\r\n  \"email\": \"joao.silva@example.com\",\r\n  \"password\": \"minhasenha123\",\r\n  \"birthday\": \"2001/04/01\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/api/user/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"register"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}

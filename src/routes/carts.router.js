@@ -18,7 +18,7 @@ router.post('/', validateCart ,async (req, res) => {
         const newCart = await newCartManager.createCart(pid,parseInt(quantity));
         res.status(201).json(newCart);
     } catch (error) {
-        res.json('error ao criar carrinho: ' + error.message);
+        res.status(500).json('error ao criar carrinho: ' + error.message);
     }
 })
 
@@ -49,6 +49,9 @@ router.get('/:cid',  async (req, res) => {
 
     try {
         const cart = await newCartManager.getCart(cid);
+        if (!cart) {
+            return res.status(404).json({ error: "Carrinho não encontrado" });
+        }
         res.json(cart);
     } catch (error) {
         res.json({ error: error.message });
@@ -98,9 +101,6 @@ router.delete('/:cid', async (req, res) => {
         res.json({ error: error.message });
     }
 
-
-
 })
-
 
 module.exports = router;

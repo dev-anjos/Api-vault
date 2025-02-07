@@ -2,7 +2,6 @@
 const express = require('express');
 const productManager = require('../controllers/produtcs.controller');
 const validateProductBody= require('../middleware/products.middleware');
-const mongoose = require('mongoose');
 const productsModel = require('../database/models/products.model');
 const pm = new productManager
 const router = express.Router();
@@ -39,17 +38,16 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
 
-
     try {
         const product = await pm.getProductById(id);
         if (!product) {
             return res.status(404).json({ error: "O produto com o ID informado não foi encontrado." });
         }
+
         res.json(product);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
-
 })
 
 router.post('/', validateProductBody,async (req, res) => {
@@ -59,15 +57,12 @@ router.post('/', validateProductBody,async (req, res) => {
 
     try {
 
-        //Forma mais verbose
-        // const existingProducts = await productsModel.find();
-        // const codeExists = 
-        //   existingProducts.some((product) => product.code === code)
-        // ; 
-
-        const codeExists = await productsModel.findOne({code: code})
-        if (codeExists) {
+        if (await productsModel.findOne({code: code})) {
             return res.status(400).json({ error: "O código já existe" });
+        }
+
+        if (await productsModel.findOne({title: title.toUpperCase()})) {
+            return res.status(400).json({ error: "O nome do produto já existe" });
         }
 
         await pm.addProduct(

@@ -2,6 +2,7 @@
 
 .list-group{
     display: flex;
+    flex-direction: row !important;
     flex-wrap: wrap;
     justify-content: center;
 }
@@ -68,3 +69,4 @@
 .nextpage button{
     margin: 4px;
 }
+

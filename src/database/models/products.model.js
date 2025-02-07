@@ -19,7 +19,6 @@ const productSchema = new mongoose.Schema({
     status: Boolean
 });
 
-
 productSchema.pre('save', function(next) {
     this.title = this.title.toUpperCase();
     this.description = this.description.toUpperCase();
@@ -29,7 +28,4 @@ productSchema.pre('save', function(next) {
   });
 
 productSchema.plugin(mongoosePaginate)
-
-
-
 module.exports = mongoose.model(userCollectionsProduct, productSchema);

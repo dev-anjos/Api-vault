@@ -6,7 +6,7 @@ socket.on("connect", () => {
 
 socket.on("refreshProducts", () => {
     alert("Produto atualizados com sucesso");
-    location.reload(); // Recarrega a página para refletir as alterações
+    location.reload();
 });
 
 // Recebe as mensagens do servidor e exibe no chat
@@ -15,7 +15,7 @@ socket.on('chat message', (msg) => {
     const message = document.createElement('p');
     message.textContent = msg;
     chatBox.appendChild(message);
-    chatBox.scrollTop = chatBox.scrollHeight; // Rola para a última mensagem
+    chatBox.scrollTop = chatBox.scrollHeight;
 });
 
 // Função para enviar a mensagem
@@ -25,7 +25,7 @@ function sendMessage() {
 
     if (inputMessage.value && inputUsername.value) {
         socket.emit('chat message', inputUsername.value , inputMessage.value);
-        inputMessage.value = ''; // Limpa o campo de entrada
+        inputMessage.value = '';
     }
 }
 

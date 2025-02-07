@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const userCollectionsCarts = "carts";
 
 const cartsSchema = new mongoose.Schema({

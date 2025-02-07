@@ -1,12 +1,13 @@
 // const fs = require('fs');
 const cartsModel = require('../database/models/carts.model');
+const {startSession} = require("mongoose");
 
 
 class CartManager{
-    constructor(){
-        // this.path = "src/data/fileSystem/products.json";
-        // this.id = 1;
-    }
+    // constructor(){
+    //     // this.path = "src/data/fileSystem/products.json";
+    //     // this.id = 1;
+    // }
 
     // Método privado para leitura do arquivo
     // #readFile() {
@@ -35,22 +36,33 @@ class CartManager{
         try {
             return await cartsModel.create({products: [{product: pid, quantity: quantity}]});
         } catch (error) {
-            throw new Error(error.message);
+            return Error(error.message);
         }
     }
 
-    async addProductToCart(cid, pid, quantity) {
-        const existingCart = await cartsModel.findOneAndUpdate(
-            { _id: cid, "products.product": pid },
-            { $inc: { "products.$.quantity": quantity } },
-            { new: true }
-        );
 
-        if (!existingCart) {
-            await cartsModel.updateOne(
-                { _id: cid },
-                { $push: { products: { product: pid, quantity: quantity } } }
-            );
+    async addProductToCart(cid, pid, quantity) {
+        const session = await startSession();
+        try {
+            await session.withTransaction(async () => {
+                const existingCart = await cartsModel.findOneAndUpdate(
+                    { _id: cid, "products.product": pid },
+                    { $inc: { "products.$.quantity": quantity } },
+                    { new: true, session }
+                );
+
+                if (!existingCart) {
+                    await cartsModel.updateOne(
+                        { _id: cid },
+                        { $push: { products: { product: pid, quantity: quantity } } },
+                        { session }
+                    );
+                }
+            });
+        } catch (error) {
+            throw new Error(error.message);
+        } finally {
+            await session.endSession();
         }
     }
 
@@ -67,6 +79,7 @@ class CartManager{
         }
     }
 
+    // usado apenas nas rotas de view
     async removeProductFromCart (cid, pid) {
         try {
             await cartsModel.findOneAndUpdate(
@@ -78,6 +91,7 @@ class CartManager{
         }
     }
 
+    // usado apenas nas rotas de view
     async decreaseProductQuantity(cid, pid) {
 
         try {
@@ -97,6 +111,8 @@ class CartManager{
         }
     }
 
+
+    // usado apenas nas rotas de view
     async increaseProductQuantity(cid, pid) {
 
         try {
@@ -115,6 +131,7 @@ class CartManager{
             throw new Error(error.message);
         }
     }
+
 
     async updateProductToCart(cid, pid, quantity) {
 

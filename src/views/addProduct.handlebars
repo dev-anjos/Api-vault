@@ -1,44 +1,27 @@
     <div class="container-form">
+        <p class=" mt-5 mb-3 text-muted">Area de admin</p>
+        <form action="/api/view/create" method="POST" class="form-signin">
+            <h1 class="h3 mb-3 font-weight-normal">Adicionar produto</h1>
 
-        <form action="/api/view/create" method="POST" class="form">
-            <label for="title"> Nome do produto</label><br>
-            <input type="text" name="title"  required><br>
+            <label for="title" class="sr-only">Nome do produto</label>
+            <input type="text" name="title" id="title" class="form-control" placeholder="Nome do produto" required><br>
 
-            <label for="title"> Descrição</label><br>
-            <input type="text" name="description" placeholder="Descrição" required><br>
+            <label for="description" class="sr-only">Descrição</label>
+            <input type="text" name="description" id="description" class="form-control" placeholder="Descrição" required><br>
 
-            <label for="title"> Preço</label><br>
-            <input type="number" name="price" placeholder="Preço" required><br>
+            <label for="price" class="sr-only">Preço</label>
+            <input type="number" name="price" id="price" class="form-control" placeholder="Preço" required><br>
 
-            <label for="title"> Codigo</label><br>
-            <input type="text" name="code" id="code" placeholder="Codigo" required><br>
+            <label for="code" class="sr-only">Cdigo</label>
+            <input type="text" name="code" id="code" class="form-control" placeholder="Cdigo" required><br>
 
-            <label for="title"> Estoque</label><br>
-            <input type="number" name="stock" placeholder="Estoque" required><br>
+            <label for="stock" class="sr-only">Estoque</label>
+            <input type="number" name="stock" id="stock" class="form-control" placeholder="Estoque" required><br>
 
-            <label for="title"> Categoria</label><br>
-            <input type="text" name="category" placeholder="Categoria" required><br><br>
+            <label for="category" class="sr-only">Categoria</label>
+            <input type="text" name="category" id="category" class="form-control" placeholder="Categoria" required><br><br>
 
-            <button type="submit" >Adicionar produto</button>
+            <button type="submit" class="btn btn-lg btn-primary btn-block">Adicionar produto</button>
+            <a class="mt-1 mb-3 btn btn-lg btn-primary btn-block" href="/api/view/products" > <- Retornar para produtos</a>
         </form>
     </div>
-
-    <script>
-        {{!-- const productsModel = require("../database/models/products.model");
-        const codeId = document.getElementById("code");
-        codeId.value = undefined;
-
-        codeId.addEventListener("input", async () => {
-            const code = codeId.value
-
-            try {
-                const response = await fetch(`/api/view/create/${code}`);
-                const product = await response.json();
-                if (!product) {
-                    alert("Código não existe");
-                }
-            } catch (error) {
-                console.log(error);
-            }
-        }); --}}
-    </script>

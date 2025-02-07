@@ -1,0 +1,22 @@
+<div class=" container">
+    <a href="/api/view/products" class=" btn btn-primary"> Produtos</a>
+</div>
+
+<div class="text-center container-form">
+    <form class="form-signin">
+        <h1 class="h3 mb-3 font-weight-normal">Perfil</h1>
+        <img src="https://picsum.photos/200" class="rounded-circle" alt="Avatar" width="100" height="100">
+        <label for="firstName" class="sr-only">Nome</label>
+        <input type="text" name="firstName" id="firstName" class="form-control mt-2" placeholder="Nome" value="{{firstName}}" readonly>
+        <label for="lastName" class="sr-only">Sobrenome</label>
+        <input type="text" name="lastName" id="lastName" class="form-control mt-2" placeholder="Sobrenome" value="{{lastName}}" readonly>
+        <label for="email" class="sr-only">Endereço de email</label>
+        <input type="email" name="email" id="email" class="form-control mt-2" placeholder="Endereço de email" value="{{email}}" readonly>
+        <label for="birthday" class="sr-only">Data de nascimento:</label>
+        <input type="date" name="birthday" id="birthday" class="form-control mt-2" placeholder="Data de nascimento" value="{{moment birthday 'YYYY-MM-DD'}}" readonly>
+        <a class="btn btn-lg btn-primary btn-block mt-2" onclick="location.href='/api/session/logout'">Logout</a>
+    </form>
+</div>
+
+
+
