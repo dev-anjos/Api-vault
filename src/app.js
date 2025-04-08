@@ -1,31 +1,37 @@
-const express = require("express");
-const productsRouter = require('./routes/products.router');
-const cartsRouter = require('./routes/carts.router');
-const messagesModel = require('./database/models/messages.model');
-const viewRouter = require('./routes/view.router');
-const userRouter = require('./routes/user.router');
-const sessionRouter = require('./routes/session.router');
+import express from "express";
+import handlebars from "express-handlebars";
+import handlebarsHelpers from "handlebars";
+import mongoose from "mongoose";
+import http from "http";
+import path from "path";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import initializePassport from "./config/passportStrategy.js";
+import local from "passport-local";
+import MongoStore from "connect-mongo";
+import moment from "moment";
+import passport from "passport";
+import {config} from "dotenv";
+import productsRouter from './routes/products.router.js';
+import cartsRouter  from './routes/carts.router.js';
+import messagesModel  from './database/models/messages.model.js';
+import viewRouter  from './routes/view.router.js';
+import userRouter  from './routes/user.router.js';
+import sessionRouter  from './routes/session.router.js';
+import {Server}  from 'socket.io';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-const handlebars = require('express-handlebars');
-const handlebarsHelpers = require('handlebars');
-const {Server} = require('socket.io')
-const mongoose = require('mongoose');
-const http = require('http');
-const path = require("path");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const staticPath = path.join(__dirname, "Public");
+
 const app = express();
 const server = http.createServer(app)
 const socketServer = new Server(server)
-const session = require('express-session');
-const cookieParser = require('cookie-parser');
-const initializePassport = require('./config/passportStrategy');
-const local = require('passport-local');
-const MongoStore = require('connect-mongo');
-const moment = require('moment');
-const passport = require("passport");
 const port = 8080
 
-const staticPath = path.join(__dirname, "Public");
-require('dotenv').config();
+config();
 
 handlebarsHelpers.registerHelper('moment', function(date, format) {
     return moment(date).format(format);

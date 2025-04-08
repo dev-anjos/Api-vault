@@ -1,11 +1,16 @@
-const express = require('express');
-const productManager = require("../controllers/produtcs.controller");
-const cartManager = require("../controllers/carts.controller");
-const productsModel = require("../database/models/products.model");
+import express from "express";
+import ProductManager from "../controllers/produtcs.controller.js";
+import CartManager from "../controllers/carts.controller.js";
+import productsModel from "../database/models/products.model.js";
+import {validateCart}  from "../middleware/carts.middleware.js";
+import ProductDto  from  "../dto/product.dto.js";
+import {_CartRepository, _ProductRepository} from "../repositories/index.js";
+import CartDto from "../dto/cart.dto.js";
+import mongoose from "mongoose";
+
 const router = express.Router();
-const {validateCart} = require("../middleware/carts.middleware");
-const pm = new productManager
-const cm = new cartManager
+const pm = new ProductManager
+const cm = new CartManager
 
 //rota de view
 router.get('/addproduct', async (req, res) => {
@@ -20,26 +25,16 @@ router.get('/addproduct', async (req, res) => {
 });
 
 router.post('/create',async (req, res) => {
-    const {
-        title, description, price, thumbnail = {},code, stock, category, status
-    } = req.body;
+    const product =  new ProductDto(req.body);
 
     try {
 
-        //Forma mais verbose
-        // const existingProducts = await productsModel.find();
-        // const codeExists =
-        //   existingProducts.some((product) => product.code === code)
-        // ;
-
-        const codeExists = await productsModel.findOne({code: code})
+        const codeExists = await _ProductRepository.productCodeExists(product.code);
         if (codeExists) {
             return res.status(400).json({ error: "O código já existe" });
         }
 
-        const newProduct =  pm.addProduct(
-            { title, description, price, thumbnail, code, stock, category, status}
-        );
+        const newProduct =  await _ProductRepository.createProduct(product);
 
         const io = req.app.socketServer;
         if (io) { io.emit('addProduct', newProduct)}
@@ -92,7 +87,7 @@ router.get('/products', async (req, res) => {
 
 //rota de view
 router.get('/realtimeproducts', async (req, res) => {
-    const products = await pm.getProducts();
+    const products = await _ProductRepository.getProducts();
     res.render("realTimeProducts", { products });
 });
 
@@ -103,7 +98,7 @@ router.get('/messages', async (req, res) => {
 
 router.get('/detailsProduct/:id', async (req, res) => {
     const { id } = req.params;
-    const product = await pm.getProductById(id);
+    const product = await _ProductRepository.getProductById(id);
 
     if (product) {
         res.render("detailsProduct", { title: product.title, price: product.price, description: product.description, product });
@@ -116,16 +111,14 @@ router.get('/detailsProduct/:id', async (req, res) => {
 router.get('/cart/:cid', async (req, res) => {
     const { cid } = req.params;
 
-    console.log("Aqui")
-
     if (!cid) {
         res.send("Carrinho não encontrado");
     }else {
         const currentCartId = req.session.cartId = cid
 
-        const cart = await cm.getCart(currentCartId);
+        const cart = await _CartRepository.getCartById(currentCartId);
         const productIds = cart.products.map((product) => product.product.toString());
-        const products = await Promise.all(productIds.map((id) => pm.getProductById(id)));
+        const products = await Promise.all(productIds.map((id) => _ProductRepository.getProductById(id)));
 
         const cartProducts = cart.products.map((cartProduct) => {
             const product = products.find((p) => p._id.toString() === cartProduct.product.toString());
@@ -135,27 +128,20 @@ router.get('/cart/:cid', async (req, res) => {
         res.render("cart", { cartId: currentCartId, cart: cartProducts });
     }
 
-
-
-
 })
 
 router.post('/addtocart', validateCart ,async (req, res) => {
-    const {pid, quantity} = req.body;
+    const product = new CartDto(req.body);
 
     try {
         let currentCartId = req.session.cartId
 
         if (!currentCartId) {
-            const newCart = await cm.createCart(pid,parseInt(quantity));
+            const newCart = await _CartRepository.CreateCart(product);
             currentCartId = req.session.cartId = newCart._id;
         }
 
-        // const newCart = await cm.createCart(pid,parseInt(quantity));
-        // const io = req.app.socketServer;
-        // if (io) { io.emit('updateCart' , newCart)}
-
-        await cm.addProductToCart(req.session.cartId, pid, parseInt(quantity));
+        await _CartRepository.addProductToCart(req.session.cartId, product.pid, parseInt(product.quantity));
 
         res.redirect("cart/" + currentCartId);
     } catch (error) {
@@ -163,26 +149,25 @@ router.post('/addtocart', validateCart ,async (req, res) => {
     }
 })
 
-router.post('/removeFromCart/:cid' , async (req, res) => {
-    const { pid } = req.body;
-    const { cid } = req.params;
+router.post('/removeFromCart/:cid',
+    async (req, res) => {
+        const request = new CartDto({...req.body, cid: req.params.cid});
+
+        try {
+            await _CartRepository.removeProductFromCart(request.cid, request.pid);
+
+            res.redirect(`/api/view/cart/${request.cid}`);
+        } catch (error) {
+            res.json('error ao deletar item do carrinho: ' + error.message);
+        }
+    })
+
+router.post("/decreaseQuantity/:cid" ,
+    async (req, res) => {
+    const request = new CartDto({...req.body, cid: req.params.cid});
 
     try {
-
-        await cm.removeProductFromCart(cid, pid);
-        res.redirect(`/api/view/cart/${cid}`);
-    } catch (error) {
-        res.json('error ao deletar item do carrinho: ' + error.message);
-    }
-})
-
-
-router.post("/decreaseQuantity/:cid" , async (req, res) => {
-    const { pid } = req.body;
-    const { cid } = req.params;
-
-    try {
-        await cm.decreaseProductQuantity(cid, pid);
+        await _CartRepository.decreaseProductQuantity(request.cid, request.pid);
         res.redirect(`/api/view/cart/${req.session.cartId}`);
     } catch (error) {
         res.json('error ao diminuir item do carrinho: ' + error.message);
@@ -190,11 +175,10 @@ router.post("/decreaseQuantity/:cid" , async (req, res) => {
 } )
 
 router.post("/increaseQuantity/:cid" , async (req, res) => {
-    const { pid } = req.body;
-    const { cid } = req.params;
+    const request = new CartDto({...req.body, cid: req.params.cid});
 
     try {
-        await cm.increaseProductQuantity(cid, pid);
+        await _CartRepository.increaseProductQuantity(request.cid, request.pid);
         res.redirect(`/api/view/cart/${req.session.cartId}`);
     } catch (error) {
         res.json('error ao aumentar item do carrinho: ' + error.message);
@@ -220,4 +204,4 @@ router.get('/forbidden', (req, res) => {
     res.render('forbidden', {messages });
 });
 
-module.exports = router;
+export default router;

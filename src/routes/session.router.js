@@ -1,8 +1,8 @@
-const express = require("express");
-const userModel = require("../database/models/user.model");
-const bcrypt = require('bcrypt');
-const passport = require('passport');
+import express from "express";
+import passport from 'passport';
+
 const router = express.Router();
+let scope;
 
 router.use((req, res, next) => {
     if (req.session.user) {
@@ -22,27 +22,6 @@ router.post('/login' ,  passport.authenticate("login" , { failureRedirect: "/api
     }
 
     res.redirect("/api/user/profile")
-
-    // const { email, password } = req.body;
-    //
-    // try {
-    //     const user = await userModel.findOne({ email });
-    //     console.log(user)
-    //     if (!user) {
-    //         return res.status(401).json({ error: "Usuário ou senha incorretos" });
-    //     }
-    //
-    //     const isValidPassword = await bcrypt.compare(password, user.password);
-    //     if (!isValidPassword) {
-    //         return res.status(401).json({ error: "Usuário ou senha incorretos" });
-    //     }
-    //     req.session.user = user;
-    //     const sessionUser = JSON.stringify(req.session)
-    //     console.log(sessionUser)
-
-    // }catch (error) {
-    //     res.status(500).send({ error: error.message });
-    // }
 })
 
 router.get('/loginwithgithub', passport.authenticate('loginWithGithub', scope = ['user']), (req, res) => {
@@ -66,4 +45,4 @@ router.get('/logout', (req, res) => {
     });
 });
 
-module.exports = router;
+export default router;

@@ -1,61 +1,20 @@
- 
-// Importação fs
-// const fs = require('fs');
-// const { parse } = require('path');
-
-const productsModel = require('../database/models/products.model');
-
+import productsModel from '../database/models/products.model.js';
 
 class ProductManager {
-  // constructor() {
-  //   //this.products = [];
-  //   this.path = "src/data/fileSystem/products.json";
-  //   this.id = 1;
-  // }
-
-  // Método privado para leitura do arquivo -   NÃO UTILIZADO
-  // #readFile() {
-
-  //   if (fs.existsSync(this.path)) {
-  //     const fileContent = fs.readFileSync(this.path, "utf-8");
-  //     // ...
-  //   } else {
-  //     console.error("Arquivo não encontrado:", this.path);
-  //   }
-
-  //   try {
 
 
-  //     const fileContent = fs.readFileSync(this.path, "utf-8");
-
-  //     return fileContent ? JSON.parse(fileContent) : []; // Retorna array vazio se o arquivo estiver vazio
-  //   } catch (err) {
-  //     res.status(500).json({ error: 'Erro ao ler o arquivo' });
-  //     return [];
-  //   }
-  // }
-
-  // // Método privado para escrita no arquivo
-  // #writeFile(data) {
-  //     try {
-  //     const jsonData = JSON.stringify(data, null, 2);
-  //     fs.writeFileSync(this.path, jsonData);
-  //     console.log('Produtos salvos com sucesso!');
-  //     } catch (err) {
-  //       res.status(500).json({ error: 'Erro ao salvar alterações' });
-  //     }
-  // }
-
-
-  async addProduct({ title, description, price, thumbnail, code, stock ,category, status = true })  {
+  async addProduct(product)  {
 
     try {
-
         return await productsModel.create({
-          title, description,
-          price, thumbnail: thumbnail || [],
-          code, stock,
-          status, category,
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          thumbnail: product?.thumbnail || [],
+          code: product.code,
+          stock: product.stock,
+          category: product.category,
+          status: product?.status || true
         });
 
     } catch (error) {
@@ -95,4 +54,4 @@ class ProductManager {
 
 }
 
-module.exports = ProductManager
+export default ProductManager;

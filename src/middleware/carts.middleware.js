@@ -1,9 +1,8 @@
-const {isValidObjectId} = require("mongoose");
-const validateParams = (req, res, next) => {
+import {isValidObjectId} from "mongoose";
+
+export const validateParams = (req, res, next) => {
   const pid = req.params.pid;
   const cid = req.params.cid;
-
-
 
   if (!isValidObjectId(pid)) {
     return res.status(400).json({ error: 'Formato PID inválido' });
@@ -20,18 +19,8 @@ const validateParams = (req, res, next) => {
   next();
 };
   
-  const validateCart = (req, res, next) => {
+  export const validateCart = (req, res, next) => {
     const {pid, quantity} = req.body;
-
-    // if (pid === "") {
-    //   console.log(pid);
-    //   return res.status(400).json({ error: 'PID inválido' });
-    // }
-    //
-    // if (!quantity || isNaN(quantity) || quantity <= 0) {
-    //   return res.status(400).json({ error: 'Quantidade inválida' });
-    // }
-
 
     if (!pid || !quantity) {
       return res.status(400).json({ error: 'Todos os campos são obrigatórios. middleware'});
@@ -40,7 +29,4 @@ const validateParams = (req, res, next) => {
     next();
   };
 
-  module.exports = {
-    validateParams,
-    validateCart
-  }
+export default {validateParams, validateCart};

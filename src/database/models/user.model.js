@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+import mongoose from "mongoose";
+
 const userCollections = "users";
 
 const userSchema = new mongoose.Schema({
@@ -11,4 +12,4 @@ const userSchema = new mongoose.Schema({
     avatar: { type: String , default: ''},
 });
 
-module.exports = mongoose.model(userCollections, userSchema);
+export default mongoose.model(userCollections, userSchema);

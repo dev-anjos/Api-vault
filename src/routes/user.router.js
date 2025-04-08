@@ -1,16 +1,11 @@
-const express = require("express");
+import express from "express";
+import RegisterDto from "../dto/register.dto.js";
+import passport from 'passport';
+
 const router = express.Router();
-const passport = require('passport');
 
 router.post("/register",  passport.authenticate("register", { failureRedirect: "/api/view/forbidden" }), async (req, res) => {
-
-    req.session.user = {
-        firstName: req.user.firstName,
-        lastName: req.user.lastName,
-        email: req.user.email,
-        role: req.user.role,
-        birthday: req.user.birthday
-    }
+    req.session.user = new RegisterDto(req.user);
     return res.redirect("/api/user/profile");
 });
 
@@ -23,5 +18,5 @@ router.get('/profile', (req, res) => {
         res.render('profile', { firstName, lastName, email, birthday });
     }
 });
-module.exports = router;
+export default router;
 

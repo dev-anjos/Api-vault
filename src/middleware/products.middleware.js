@@ -29,4 +29,4 @@ const validateProductBody = (req, res, next) => {
   return next();
 };
 
-module.exports = validateProductBody
+export default validateProductBody;
