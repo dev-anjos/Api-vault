@@ -20,11 +20,5 @@ router.get('/profile', (req, res) => {
 });
 
 
-
-router.get('user-list', (req, res) => {
-
-
-
-})
 export default router;
 

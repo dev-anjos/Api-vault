@@ -13,6 +13,11 @@ class UserController{
         const sort = req.query.sort;
         const filter = req.query.query ? {last_connection: req.query.query} : {};
 
+        if (req.session.user.role !== 'admin') {
+            const messages = req.session.messages = "Acesso negado! Espaço destinados a Admin."
+            res.render('forbidden', {messages})
+        }
+
         try {
             const paginatedUser = await userService.getPaginatedUser(filter, {
                 page,
@@ -22,7 +27,9 @@ class UserController{
 
             const usersDto = paginatedUser.docs.map(user => new UserDto(user));
 
-           res.render( {
+            console.log(usersDto)
+
+           res.render( "userList",{
                 status: 'success',
                 payload: usersDto,
                 totalPages: paginatedUser.totalPages,
@@ -32,11 +39,64 @@ class UserController{
                 hasNextPage: paginatedUser.hasNextPage,
                 hasPrevPage: paginatedUser.hasPrevPage,
                 prevLink: paginatedUser.hasPrevPage
-                    ? `/api/products?page=${paginatedUser.prevPage}&limit=${limit}`
+                    ? `/api/view/user-list?page=${paginatedUser.prevPage}&limit=${limit}`
                     : null,
                 nextLink: paginatedUser.hasNextPage
-                    ? `/api/products?page=${paginatedUser.nextPage}&limit=${limit}`
+                    ? `/api/view/user-list?page=${paginatedUser.nextPage}&limit=${limit}`
                     : null,
+            });
+        } catch (error) {
+            res.status(500).json({
+                status: 'error',
+                message: error.message
+            });
+        }
+    }
+
+    static detailsUser = async (req, res) => {
+        const { id } = req.params;
+        try {
+
+            console.log(id)
+
+            const user = await userService.findUserById(id)
+            if (!user) {
+                return res.status(404).json({
+                    status: 'error',
+                    message: "User not found"
+                });
+            }
+            const userDto = new UserDto(user);
+
+            console.log(userDto)
+            res.render("detailsUser", {
+                payload: userDto
+            });
+        } catch (error) {
+            res.status(500).json({
+                status: 'error',
+                message: error.message
+            });
+        }
+    }
+
+    static deleteUser = async (req, res) => {
+        const { id } = req.params;
+        try {
+            console.log(id)
+
+            const user = await userService.findUserByIdAndDelete(id);
+
+            console.log(user)
+            if (!user) {
+                return res.status(404).json({
+                    status: 'error',
+                    message: "User not found"
+                });
+            }
+            res.render( "success", {
+                status: 'success',
+                message: "User deleted successfully"
             });
         } catch (error) {
             res.status(500).json({

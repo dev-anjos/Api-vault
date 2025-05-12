@@ -22,10 +22,9 @@ router.get('/addproduct', async (req, res) => {
 
     if (req.session.user.role !== 'admin') {
        const messages = req.session.messages = "Acesso negado! Espaço destinados a Admin."
-       res.render('forbidden', {messages})
-   }else{
-       res.render("addProduct", );
+       return res.render('forbidden', {messages})
    }
+       res.render("addProduct", );
 });
 
 router.post('/create',async (req, res) => {
@@ -231,6 +230,11 @@ router.get('/register', (req, res) => {
 });
 
 router.get('/user-list', UserController.usersList )
+
+router.get('/delete-user/:id', UserController.deleteUser )
+
+router.get('/user-details/:id', UserController.detailsUser )
+
 
 router.get('/forbidden', (req, res) => {
     console.log("failed Strategy");

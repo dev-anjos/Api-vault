@@ -27,6 +27,15 @@ class UserService {
         const userDto = new UserDto(userData);
         return this.repository.update(id,userDto);
     }
+
+    async findUserByIdAndDelete(id) {
+        return this.repository.delete(id);
+    }
+
+    async findUserById(id) {
+        return this.repository.getById(id);
+    }
+
 }
 
 export default UserService
