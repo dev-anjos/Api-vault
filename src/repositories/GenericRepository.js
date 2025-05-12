@@ -1,4 +1,4 @@
-export default class GenericRepository {
+class GenericRepository {
     constructor(dao) {
         this.dao = dao;
     }
@@ -20,10 +20,12 @@ export default class GenericRepository {
     }
 
     async delete(id) {
-        return this.dao.findByIdAndDelete(id);
+        return this.dao.findByIdAndDelete(id)
     }
 
     async exists(conditions) {
-        return this.dao.exists(conditions);
+        return this.dao.findOne(conditions);
     }
 }
+
+export default GenericRepository

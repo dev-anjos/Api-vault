@@ -18,5 +18,13 @@ router.get('/profile', (req, res) => {
         res.render('profile', { firstName, lastName, email, birthday });
     }
 });
+
+
+
+router.get('user-list', (req, res) => {
+
+
+
+})
 export default router;
 

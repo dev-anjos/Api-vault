@@ -1,8 +1,8 @@
 class CartDto {
-    constructor(newCart) {
-        this.cid = newCart.cid
-        this.pid = newCart.pid;
-        this.quantity = newCart.quantity;
+    constructor(data) {
+        this.cid = data.cid;
+        this.pid = data.pid;
+        this.quantity = data.quantity;
     }
 }
 

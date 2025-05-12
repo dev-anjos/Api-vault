@@ -1,0 +1,35 @@
+<div class="container">
+    <h2>Lista de Usuários</h2>
+    <button class="btn btn-danger mb-3" onclick="location.href='/api/users/clearOldUsers'">Limpar Usuários Antigos</button>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>E-mail</th>
+                <th>Última Conexão</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each payload}}
+                <tr>
+                    <td>{{this.email}}</td>
+                    <td>{{this.lastConnection}}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="location.href='/api/users/details/{{this._id}}'">Ver Detalhes</button>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        <div class="nextpage">
+            <button onclick="location.href='{{this.prevLink}}'"><<</button>
+            <button onclick="location.href='{{this.nextLink}}'">>></button>
+        </div>
+
+        <div>
+            Página {{this.page}} de {{this.totalPages}}
+        </div>
+    </div>
+</div>

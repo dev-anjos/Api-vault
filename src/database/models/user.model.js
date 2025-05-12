@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
+import mongoosePaginate from "mongoose-paginate-v2";
+
 const userCollections = "users";
 
 const userSchema = new mongoose.Schema({
@@ -10,6 +12,9 @@ const userSchema = new mongoose.Schema({
     birthday: { type: Date, default: Date.now },
     role: { type: String, enum: ['user', 'admin'], default: 'user' },
     avatar: { type: String , default: ''},
+    last_connection: { type: Date, default: Date.now() },
 });
+
+userSchema.plugin(mongoosePaginate)
 
 export default mongoose.model(userCollections, userSchema);

@@ -1,32 +1,47 @@
-import Products from '../models/products.model.js';
+import ProductsModel from '../models/products.model.js';
 
-class products {
-    constructor() {}
+export default class ProductsDAO {
+    constructor() {
+        this.model = ProductsModel;
+    }
 
-    async get() {
-        return Products.find();
+    async find() {
+        return this.model.find();
     }
 
     async findById(id) {
-        return Products.findById(id);
+        return this.model.findById(id);
     }
 
     async exists(conditions) {
-        const result = Products.exists(conditions).lean;
-        return result !== null;
+        return this.model.findOne(conditions);
     }
 
     async create(product) {
-        return Products.create(product);
+        return this.model.create(product);
     }
 
-    async update(product) {
-        return Products.findByIdAndUpdate(product.id);
+/*    async findByIdAndUpdate(id, update, options = {}) {
+        return this.model.findByIdAndUpdate(id, update, { ...options, new: true });
+    }*/
+
+    async findByIdAndUpdate(id, update) {
+        return this.model.findByIdAndUpdate(
+            {_id: id},
+            {$set: update},
+            {new: true}
+        );
     }
 
-    async delete(id) {
-        return Products.findByIdAndDelete(id);
+    async findByIdAndDelete(id) {
+        return this.model.findByIdAndDelete(id);
+    }
+
+    async findOne(conditions) {
+        return this.model.findOne(conditions);
+    }
+
+    async paginate(filter, options) {
+        return this.model.paginate(filter, options);
     }
 }
-
-export default products;

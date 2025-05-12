@@ -6,6 +6,7 @@
             <button onclick="location.href='/api/session/logout'" class=" btn btn-primary mr-2">Sair</button>
             <button onclick="location.href='/api/view/addproduct'" class=" btn btn-primary mr-2">Adicionar Produto</button>
             <button onclick="location.href='/api/view/cart/{{cartId}}'" id="cartId" class=" btn btn-primary">Ver Carrinho</button>
+            <button onclick="location.href='/api/view/user-list'" class=" btn btn-primary">Lista de Usuários</button>
         </div>
 
     <h2>Lista de produtos</h2>
@@ -17,12 +18,12 @@
                 <div class="card-body">
                     <h5 class="card-title">{{this.title}}</h5>
                     <p class="card-text">{{description}}</p>
-                    <p class="card-text">Pre o: R${{price}}</p>
+                    <p class="card-text">Preço: R${{price}}</p>
                     <p class="card-text">Categoria: {{category}}</p>
                     <p class="card-text">Estoque: {{stock}}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="location.href='/api/view/detailsProduct/{{this._id}}'">Ver Detalhes</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary" onclick="location.href='/api/products/detailsProduct/{{this._id}}'">Ver Detalhes</button>
                         </div>
                     </div>
                 </div>

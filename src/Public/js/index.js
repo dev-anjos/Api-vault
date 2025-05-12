@@ -1,4 +1,8 @@
-const socket = io();
+import messageInput from "multer/lib/counter.js";
+import {Server}  from 'socket.io';
+const socketServer = new Server(Server)
+
+const socket = socketServer;
 
 socket.on("connect", () => {
     console.log("Conectado ao servidor");

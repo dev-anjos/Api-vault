@@ -1,63 +1,50 @@
-import Carts from '../models/carts.model.js';
+import CartsModel from '../models/carts.model.js';
 import {startSession} from "mongoose";
-import cartsModel from "../models/carts.model.js";
 
-class carts {
-    constructor() {}
+export default class CartsDAO {
+    constructor() {
+        this.model = CartsModel;
+    }
 
     async get() {
-        return Carts.find();
+        return this.model.find();
     }
 
     async findById(id) {
-        return Carts.findById(id);
+        return this.model.findById(id);
     }
 
     async exists(conditions) {
-        const result = Carts.exists(conditions).lean;
+        const result = this.model.exists(conditions).lean;
         return result !== null;
     }
 
-    async create(product) {
-        return Carts.create(product);
+    async create(cart){
+        return this.model.create(cart);
     }
 
-    async update(product, quantity) {
-        return Carts.findByIdAndUpdate(product.id, quantity);
+
+    async findByIdAndDelete(id) {
+        return this.model.findByIdAndDelete(id);
     }
 
-    async delete(id) {
-        return Carts.findByIdAndDelete(id);
+
+    async findOneAndUpdate(cartId, productId, quantity) {
+
+        return this.model.findOneAndUpdate(
+            { _id: cartId, "products.product": productId },
+            { $set: { "products.$.quantity": quantity } },
+            { new: true });
     }
+
 
     async addProductToCart(cid, pid, quantity) {
-        const session = await startSession();
-        try {
-            await session.withTransaction(async () => {
-                const existingCart = await cartsModel.findOneAndUpdate(
-                    { _id: cid, "products.product": pid },
-                    { $inc: { "products.$.quantity": quantity } },
-                    { new: true, session }
-                );
-
-                if (!existingCart) {
-                    await cartsModel.updateOne(
-                        { _id: cid },
-                        { $push: { products: { product: pid, quantity: quantity } } },
-                        { session }
-                    );
-                }
-            });
-        } catch (error) {
-            throw new Error(error.message);
-        } finally {
-            await session.endSession();
-        }
+       return this.model.findByIdAndUpdate(cid, pid, quantity);
     }
 
-    async updateProductToCart(cid, pid, quantity) {
+/*    async updateProductToCart(cid, pid, quantity) {
         try {
-            return await cartsModel.findOneAndUpdate(
+            return await this.model.findByIdAndUpdate(
                 { _id: cid, "products.product": pid },
                 { $set: { "products.$.quantity": quantity } },
                 { new: true }
@@ -66,11 +53,11 @@ class carts {
         } catch (error) {
             throw new Error(error.message);
         }
-    }
+    }*/
 
     async RemoveProductFromCart (cid, pid) {
         try {
-            await cartsModel.findOneAndUpdate(
+            await this.model.findOneAndUpdate(
                 { _id: cid },
                 { $pull: { products: { product: pid } } }
             );
@@ -82,7 +69,7 @@ class carts {
     async decreaseProductQuantity(cid, pid) {
 
         try {
-            const result = await cartsModel.findOneAndUpdate(
+            const result = await this.model.findOneAndUpdate(
                 { _id: cid, "products.product": pid },
                 { $inc: { "products.$.quantity": -1 } },
                 { new: true }
@@ -101,7 +88,7 @@ class carts {
     async increaseProductQuantity(cid, pid) {
 
         try {
-            const result = await cartsModel.findOneAndUpdate(
+            const result = await this.model.findOneAndUpdate(
                 { _id: cid, "products.product": pid },
                 { $inc: { "products.$.quantity": +1 } },
                 { new: true }
@@ -116,6 +103,19 @@ class carts {
             throw new Error(error.message);
         }
     }
+
+
+    async updateProductToCart(cid, pid, quantity) {
+        try {
+            return await this.model.findOneAndUpdate(
+                { _id: cid, "products.product": pid },
+                { $set: { "products.$.quantity": quantity } },
+                { new: true }
+            );
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    }
 }
 
-export default carts;
+

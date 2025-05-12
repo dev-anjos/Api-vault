@@ -1,12 +1,19 @@
-import ProductsRepository from "./products.repository.js";
-import productsDAO from "../database/dao/products.mongo.js";
+import ProductsRepository from "./ProductsRepository.js";
+import CartRepository from "./CartRepository.js";
+import UserRepository from "./UserRepository.js";
+
+import ProductsDAO from "../database/dao/products.mongo.js";
 import CartsDAO from "../database/dao/carts.mongo.js";
-import CartRepository from "./cart.repository.js";
+import UsersDAO from "../database/dao/users.mongo.js";
 
-const _productsDAO = new productsDAO();
-const _ProductRepository = new ProductsRepository(_productsDAO);
+const productsDAO = new ProductsDAO();
+const _ProductRepository = new ProductsRepository(productsDAO);
 
-const _cartsDAO = new CartsDAO();
-const _CartRepository = new CartRepository(_cartsDAO);
+const cartsDAO = new CartsDAO();
+const _CartRepository = new CartRepository(cartsDAO);
 
-export { _ProductRepository, _CartRepository};
+
+const usersDAO = new UsersDAO();
+const _UserRepository = new UserRepository(usersDAO);
+
+export { _ProductRepository, _CartRepository, _UserRepository};

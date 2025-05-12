@@ -1,4 +1,4 @@
-// services/product.service.js
+
 import ProductDTO from '../dto/Product.dto.js';
 
 class ProductService {
@@ -14,19 +14,27 @@ class ProductService {
         return this.repository.getById(id);
     }
 
+    async ProductExist(condition) {
+        return this.repository.exists(condition);
+    }
+
     async createProduct(productData) {
         const product = new ProductDTO(productData);
-        product.validate();
-
-        // Verifica se código já existe
-        if (await this.repository.getByCode(product.code)) {
-            throw new Error('Product code already exists');
-        }
-
         return this.repository.create(product);
     }
 
-    // Outros métodos de serviço...
+    async getPaginatedProducts(filter, options) {
+        return this.repository.getPaginatedProducts(filter, options);
+    }
+
+    async updateProduct(id, productData){
+        const product = new ProductDTO(productData);
+        return this.repository.update(id, product);
+    }
+
+    async deleteProduct(id) {
+        return this.repository.delete(id);
+    }
 }
 
 export default ProductService

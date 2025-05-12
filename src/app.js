@@ -104,7 +104,6 @@ socketServer.on('connection', socket => {
     })
 
      socket.on('chat message', async (user, msg) => {
-         console.log(user,msg)
          await messagesModel.create({
              user: user,
              message: msg

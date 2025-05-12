@@ -1,4 +1,4 @@
-import express from "express";
+import express, {response} from "express";
 import ProductManager from "../controllers/produtcs.controller.js";
 import CartManager from "../controllers/carts.controller.js";
 import productsModel from "../database/models/products.model.js";
@@ -7,14 +7,18 @@ import ProductDto  from  "../dto/product.dto.js";
 import {_CartRepository, _ProductRepository} from "../repositories/index.js";
 import CartDto from "../dto/cart.dto.js";
 import mongoose from "mongoose";
+import {cartService, productService, userService} from "../services/index.js";
+import CartService from "../services/cartService.js";
+import UserController from "../controllers/users.controller.js";
 
 const router = express.Router();
+/*
 const pm = new ProductManager
 const cm = new CartManager
+*/
 
 //rota de view
 router.get('/addproduct', async (req, res) => {
-   console.log()
 
     if (req.session.user.role !== 'admin') {
        const messages = req.session.messages = "Acesso negado! Espaço destinados a Admin."
@@ -29,18 +33,22 @@ router.post('/create',async (req, res) => {
 
     try {
 
-        const codeExists = await _ProductRepository.productCodeExists(product.code);
-        if (codeExists) {
-            return res.status(400).json({ error: "O código já existe" });
+        if (await _ProductRepository.exists({code: product.code}) ||
+            await _ProductRepository.exists({title: product.title})) {
+
+            return res.status(400).json({ error: "O código já existe ou titulo ja utilizado" });
         }
 
-        const newProduct =  await _ProductRepository.createProduct(product);
+        const newProduct =  await _ProductRepository.create(product);
 
         const io = req.app.socketServer;
         if (io) { io.emit('addProduct', newProduct)}
         res.redirect("/api/view/realtimeproducts");
     } catch (error) {
-        res.json({ error: error.message });
+        if (error.code === 11000) {
+            return res.status(400).json({ error: "O código ou título já existe no banco de dados" });
+        }
+        res.status(500).json({ error: error.message });
     }
 })
 
@@ -56,7 +64,7 @@ router.get('/products', async (req, res) => {
         return res.render('forbidden' , { messages: messages});
     }
     try {
-        const products = await productsModel.paginate(filter, { page, limit, sort });
+        const products = await productService.getPaginatedProducts(filter, { page, limit, sort });
         const response = {
             status: 'success',
             payload: products.docs,
@@ -66,7 +74,7 @@ router.get('/products', async (req, res) => {
             page: products.page,
             hasNexTPage: products.hasNextPage ? products.hasNextPage : false,
             hasPrevPage: products.hasPrevPage ? products.hasPrevPage : false,
-            prevLink: products.hasPrevPage ? `/api/view/products?page=${products.prevPage}` : null, //.d
+            prevLink: products.hasPrevPage ? `/api/view/products?page=${products.prevPage}` : null,
             nextLink: products.hasNextPage ? `/api/view/products?page=${products.nextPage}` : null,
         }
 
@@ -87,7 +95,7 @@ router.get('/products', async (req, res) => {
 
 //rota de view
 router.get('/realtimeproducts', async (req, res) => {
-    const products = await _ProductRepository.getProducts();
+    const products = await _ProductRepository.getAll();
     res.render("realTimeProducts", { products });
 });
 
@@ -98,7 +106,9 @@ router.get('/messages', async (req, res) => {
 
 router.get('/detailsProduct/:id', async (req, res) => {
     const { id } = req.params;
-    const product = await _ProductRepository.getProductById(id);
+    const product = await _ProductRepository.getById(id);
+
+    console.log(req.params)
 
     if (product) {
         res.render("detailsProduct", { title: product.title, price: product.price, description: product.description, product });
@@ -113,22 +123,43 @@ router.get('/cart/:cid', async (req, res) => {
 
     if (!cid) {
         res.send("Carrinho não encontrado");
-    }else {
-        const currentCartId = req.session.cartId = cid
-
-        const cart = await _CartRepository.getCartById(currentCartId);
-        const productIds = cart.products.map((product) => product.product.toString());
-        const products = await Promise.all(productIds.map((id) => _ProductRepository.getProductById(id)));
-
-        const cartProducts = cart.products.map((cartProduct) => {
-            const product = products.find((p) => p._id.toString() === cartProduct.product.toString());
-            return { ...product, quantity: cartProduct.quantity };
-        });
-
-        res.render("cart", { cartId: currentCartId, cart: cartProducts });
     }
 
+    const currentCartId = req.session.cartId = cid
+    const cart = await _CartRepository.getById(currentCartId);
+
+    const productIds = cart.products.map((product) => product.product.toString());
+    const products = await Promise.all(productIds.map((id) => _ProductRepository.getById(id)));
+
+    const cartProducts = cart.products.map((cartProduct) => {
+        const product = products.find((p) => p._id.toString() === cartProduct.product.toString());
+        return { ...product, quantity: cartProduct.quantity };
+    });
+
+    res.render("cart", { cartId: currentCartId, cart: cartProducts });
+
+
 })
+
+/*router.post('/addtocart', validateCart ,async (req, res) => {
+    const product = new CartDto(req.body);
+
+    try {
+        let currentCartId = req.session.cartId
+
+        if (!currentCartId) {
+            const newCart = await _CartRepository.create(product);
+            console.log(newCart)
+            currentCartId = req.session.cartId = newCart._id;
+        }
+
+        await _CartRepository.updateProductToCart(req.session.cartId, product.pid, parseInt(product.quantity));
+
+        res.redirect("cart/" + currentCartId);
+    } catch (error) {
+        res.json('error ao criar carrinho: ' + error.message);
+    }
+})*/
 
 router.post('/addtocart', validateCart ,async (req, res) => {
     const product = new CartDto(req.body);
@@ -137,11 +168,12 @@ router.post('/addtocart', validateCart ,async (req, res) => {
         let currentCartId = req.session.cartId
 
         if (!currentCartId) {
-            const newCart = await _CartRepository.CreateCart(product);
+            const newCart = await cartService.createCart(product);
+            console.log(newCart)
             currentCartId = req.session.cartId = newCart._id;
         }
 
-        await _CartRepository.addProductToCart(req.session.cartId, product.pid, parseInt(product.quantity));
+        await _CartRepository.updateProductToCart(req.session.cartId, product.pid, parseInt(product.quantity));
 
         res.redirect("cart/" + currentCartId);
     } catch (error) {
@@ -197,6 +229,8 @@ router.get('/login', async (req, res) => {
 router.get('/register', (req, res) => {
     res.render('register');
 });
+
+router.get('/user-list', UserController.usersList )
 
 router.get('/forbidden', (req, res) => {
     console.log("failed Strategy");

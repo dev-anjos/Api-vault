@@ -64,7 +64,6 @@ const initializePassport = () => {
 
             return done(null, result);
         } catch (error) {
-            console.log(error);
             return done(null, false, { messages: 'Erro interno no servidor ao registrar o usuário' });
         }
     }));
