@@ -16,7 +16,7 @@ router.use( async(req, res, next) => {
 
 router.post('/login' ,  passport.authenticate("login" , { failureRedirect: "/api/view/forbidden" }), async (req, res) => {
 
-    await userService.findUserByIdAndUpdate(req.user._id , { lastConnection: new Date() });
+    await userService.findUserByIdAndUpdate(req.user._id, { $set: { last_connection: new Date() } }, { new: true });
 
     req.session.user = {
         firstName: req.user.firstName,

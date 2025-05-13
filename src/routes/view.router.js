@@ -107,8 +107,6 @@ router.get('/detailsProduct/:id', async (req, res) => {
     const { id } = req.params;
     const product = await _ProductRepository.getById(id);
 
-    console.log(req.params)
-
     if (product) {
         res.render("detailsProduct", { title: product.title, price: product.price, description: product.description, product });
     } else {
@@ -168,7 +166,6 @@ router.post('/addtocart', validateCart ,async (req, res) => {
 
         if (!currentCartId) {
             const newCart = await cartService.createCart(product);
-            console.log(newCart)
             currentCartId = req.session.cartId = newCart._id;
         }
 
@@ -234,6 +231,8 @@ router.get('/user-list', UserController.usersList )
 router.get('/delete-user/:id', UserController.deleteUser )
 
 router.get('/user-details/:id', UserController.detailsUser )
+
+router.get('/delete-users-inactive', UserController.deleteUsersInactive )
 
 
 router.get('/forbidden', (req, res) => {

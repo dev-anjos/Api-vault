@@ -164,8 +164,6 @@ class ProductsController {
       const { id } = req.params;
       const product = await productService.getProductById(id);
 
-      console.log(req.params)
-
       if (product) {
         res.render("detailsProduct", {
           title: product.title,

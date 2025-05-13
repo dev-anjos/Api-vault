@@ -7,6 +7,10 @@ class GenericRepository {
         return this.dao.find();
     }
 
+    async deleteAll() {
+        return this.dao.deleteMany();
+    }
+
     async getById(id) {
         return this.dao.findById(id);
     }

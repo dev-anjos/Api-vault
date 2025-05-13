@@ -55,9 +55,9 @@ const initializePassport = () => {
             const newUser = new User({ firstName, lastName, email, birthday, password: passwordHashed });
 
             if (!(email === 'adminCoder@coder.com' && password === 'adminCod3r123')) {
-                newUser.role = 'user';
-            } else {
                 newUser.role = 'admin';
+            } else {
+                newUser.role = 'user';
             }
 
             let result = await newUser.save();
