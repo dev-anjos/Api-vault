@@ -22,7 +22,9 @@ export const validateParams = (req, res, next) => {
   export const validateCart = (req, res, next) => {
     const {pid, quantity} = req.body;
 
-    if (!pid || !quantity) {
+    console.log(pid, quantity);
+
+    if (!pid && !quantity) {
       return res.status(400).json({ error: 'Todos os campos são obrigatórios. middleware'});
     }
   

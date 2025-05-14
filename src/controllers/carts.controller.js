@@ -1,9 +1,10 @@
 
 import mongoose, {startSession} from "mongoose";
 import CartDto from "../dto/cart.dto.js";
-import {cartService} from "../services/index.js";
+import {cartService, productService} from "../services/index.js";
 import cartsModel from "../database/models/carts.model.js";
-import {_CartRepository} from "../repositories/index.js";
+import {_CartRepository, _ProductRepository} from "../repositories/index.js";
+import {request} from "express";
 
 
 class CartsController{
@@ -28,32 +29,28 @@ class CartsController{
         }
     };
 
-   // static  addProductToCart = async (cid, pid, quantity) => {
-   //      const session = await startSession();
-   //      try {
-   //          await session.withTransaction(async () => {
-   //              const existingCart = await cartService.addProductToCart(
-   //                  { _id: cid, "products.product": pid },
-   //                  { $inc: { "products.$.quantity": quantity } },
-   //                  { new: true, session }
-   //              );
-   //
-   //              if (!existingCart) {
-   //                  await cartService.updateProductToCart(
-   //                      { _id: cid },
-   //                      { $push: { products: { product: pid, quantity: quantity } } },
-   //                      { session }
-   //                  );
-   //              }
-   //          });
-   //      } catch (error) {
-   //          throw new Error(error.message);
-   //      } finally {
-   //          await session.endSession();
-   //      }
-   //  }
 
-    static  addProductToCart = async (cid, pid, quantity) =>{
+    static addProductToCart = async (req, res) => {
+        const product = new CartDto(req.body);
+
+        try {
+            let currentCartId = req.session.cartId
+
+            if (!currentCartId) {
+                const newCart = await cartService.createCart(product);
+                currentCartId = req.session.cartId = newCart._id;
+            }
+
+            await _CartRepository.updateProductToCart(req.session.cartId, product.pid, parseInt(product.quantity));
+
+            res.redirect(`/api/carts/view-cart/${req.session.cartId}`);
+        } catch (error) {
+            res.json('error ao criar carrinho: ' + error.message);
+        }
+    }
+
+
+  /*  static  addProductToCart = async (cid, pid, quantity) =>{
         const session = await startSession();
         try {
             await session.withTransaction(async () => {
@@ -62,6 +59,8 @@ class CartsController{
                     { $inc: { "products.$.quantity": quantity } },
                     { new: true, session }
                 );
+
+                console.log("aqui")
 
                 if (!existingCart) {
                     await cartService.updateProductToCart(
@@ -77,20 +76,16 @@ class CartsController{
             await session.endSession();
         }
     }
-
+*/
 
     static  getCart = async(req, res) => {
-
         try{
-
             const { cid } = req.params;
-
             if (!cid) {
                 return res.status(400).json({ error: 'Formato CID inválido' });
             }
 
             const cart = await cartService.getCartById(cid);
-
             if (!cart) {
                 return res.status(404).json({ error: "Carrinho não encontrado" });
             }
@@ -126,54 +121,40 @@ class CartsController{
     }
 
     // usado apenas nas rotas de view
-    async removeProductFromCart (cid, pid) {
+    static  removeProductFromCart = async(req,res) => {
+        const request = new CartDto({...req.body, cid: req.params.cid});
+
         try {
-            await cartsModel.findOneAndUpdate(
-                { _id: cid },
-                { $pull: { products: { product: pid } } }
-            );
+            await _CartRepository.removeProductFromCart(request.cid, request.pid);
+
+            res.redirect(`/api/carts/view-cart/${request.cid}`);
         } catch (error) {
-            throw new Error(error.message);
+            res.json('error ao deletar item do carrinho: ' + error.message);
         }
     }
 
     // usado apenas nas rotas de view
-    async decreaseProductQuantity(cid, pid) {
+    static  decreaseProductQuantity = async(req,res) => {
+        const request = new CartDto({...req.body, cid: req.params.cid});
 
         try {
-            const result = await cartsModel.findOneAndUpdate(
-                { _id: cid, "products.product": pid },
-                { $inc: { "products.$.quantity": -1 } },
-                { new: true }
-            );
+            await _CartRepository.decreaseProductQuantity(request.cid, request.pid);
+            res.redirect(`/api/carts/view-cart/${req.session.cartId}`);
 
-            if (!result) {
-                return new Error('Cart or Product not found');
-            }
-
-            return result;
         } catch (error) {
-            throw new Error(error.message);
+            res.json('error ao diminuir item do carrinho: ' + error.message);
         }
     }
 
     // usado apenas nas rotas de view
-    async increaseProductQuantity(cid, pid) {
+    static  increaseProductQuantity = async(req,res) => {
+        const request = new CartDto({...req.body, cid: req.params.cid});
 
         try {
-            const result = await cartsModel.findOneAndUpdate(
-                { _id: cid, "products.product": pid },
-                { $inc: { "products.$.quantity": +1 } },
-                { new: true }
-            );
-
-            if (!result) {
-                return new Error('Cart or Product not found');
-            }
-
-            return result;
+            await _CartRepository.increaseProductQuantity(request.cid, request.pid);
+            res.redirect(`/api/carts/view-cart/${req.session.cartId}`);
         } catch (error) {
-            throw new Error(error.message);
+            res.json('error ao aumentar item do carrinho: ' + error.message);
         }
     }
 
@@ -212,6 +193,27 @@ class CartsController{
         }
     }
 
+
+    static async viewCart(req, res) {
+        const { cid } = req.params;
+
+        if (!cid) {
+            res.send("Carrinho não encontrado");
+        }
+
+        const currentCartId = req.session.cartId = cid
+        const cart = await cartService.getCartById(currentCartId);
+
+        const productIds = cart.products.map((product) => product.product.toString());
+        const products = await Promise.all(productIds.map((id) => productService.getProductById(id)));
+
+        const cartProducts = cart.products.map((cartProduct) => {
+            const product = products.find((p) => p._id.toString() === cartProduct.product.toString());
+            return { ...product, quantity: cartProduct.quantity };
+        });
+
+        res.render("cart", { cartId: currentCartId, cart: cartProducts });
+    }
 }
 
 export default CartsController;

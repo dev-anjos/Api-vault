@@ -27,7 +27,7 @@
                                 onclick="quantityProduct('{{this.quantity}}', '{{this._doc._id}}')"
                         >-</button>
                     </form>
-                    <form action="/api/view/removeFromCart/{{../cartId}}" method="post">
+                    <form action="/api/carts/removeFromCart/{{../cartId}}" method="post">
                         <input type="hidden" name="pid" value="{{this._doc._id}}">
                         <button name="action" value="remove" type="submit">Remover</button>
                     </form>

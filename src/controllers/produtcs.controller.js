@@ -164,12 +164,12 @@ class ProductsController {
       const { id } = req.params;
       const product = await productService.getProductById(id);
 
+
+      const productDto = new ProductDto(product);
+
       if (product) {
         res.render("detailsProduct", {
-          title: product.title,
-          price: product.price,
-          description: product.description,
-          product
+          productDto
         });
       }
     } catch (error) {

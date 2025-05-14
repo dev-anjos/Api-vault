@@ -42,19 +42,6 @@ export default class CartsDAO {
        return this.model.findByIdAndUpdate(cid, pid, quantity);
     }
 
-/*    async updateProductToCart(cid, pid, quantity) {
-        try {
-            return await this.model.findByIdAndUpdate(
-                { _id: cid, "products.product": pid },
-                { $set: { "products.$.quantity": quantity } },
-                { new: true }
-            );
-
-        } catch (error) {
-            throw new Error(error.message);
-        }
-    }*/
-
     async RemoveProductFromCart (cid, pid) {
         try {
             await this.model.findOneAndUpdate(
@@ -107,11 +94,21 @@ export default class CartsDAO {
 
     async updateProductToCart(cid, pid, quantity) {
         try {
-            return await this.model.findOneAndUpdate(
+            const result =  await this.model.findOneAndUpdate(
                 { _id: cid, "products.product": pid },
-                { $set: { "products.$.quantity": quantity } },
+                { $inc: { "products.$.quantity": quantity } },
                 { new: true }
             );
+
+            if (!result) {
+                return await this.model.findOneAndUpdate(
+                    { _id: cid },
+                    { $push: { products: { product: pid, quantity } } },
+                    { new: true }
+                );
+            }
+
+            return result
         } catch (error) {
             throw new Error(error.message);
         }

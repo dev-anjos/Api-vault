@@ -115,7 +115,7 @@ router.get('/detailsProduct/:id', async (req, res) => {
 })
 
 // Rotas carrinho
-router.get('/cart/:cid', async (req, res) => {
+/*router.get('/cart/:cid', async (req, res) => {
     const { cid } = req.params;
 
     if (!cid) {
@@ -136,46 +136,9 @@ router.get('/cart/:cid', async (req, res) => {
     res.render("cart", { cartId: currentCartId, cart: cartProducts });
 
 
-})
-
-/*router.post('/addtocart', validateCart ,async (req, res) => {
-    const product = new CartDto(req.body);
-
-    try {
-        let currentCartId = req.session.cartId
-
-        if (!currentCartId) {
-            const newCart = await _CartRepository.create(product);
-            console.log(newCart)
-            currentCartId = req.session.cartId = newCart._id;
-        }
-
-        await _CartRepository.updateProductToCart(req.session.cartId, product.pid, parseInt(product.quantity));
-
-        res.redirect("cart/" + currentCartId);
-    } catch (error) {
-        res.json('error ao criar carrinho: ' + error.message);
-    }
 })*/
 
-router.post('/addtocart', validateCart ,async (req, res) => {
-    const product = new CartDto(req.body);
 
-    try {
-        let currentCartId = req.session.cartId
-
-        if (!currentCartId) {
-            const newCart = await cartService.createCart(product);
-            currentCartId = req.session.cartId = newCart._id;
-        }
-
-        await _CartRepository.updateProductToCart(req.session.cartId, product.pid, parseInt(product.quantity));
-
-        res.redirect("cart/" + currentCartId);
-    } catch (error) {
-        res.json('error ao criar carrinho: ' + error.message);
-    }
-})
 
 router.post('/removeFromCart/:cid',
     async (req, res) => {
@@ -196,7 +159,7 @@ router.post("/decreaseQuantity/:cid" ,
 
     try {
         await _CartRepository.decreaseProductQuantity(request.cid, request.pid);
-        res.redirect(`/api/view/cart/${req.session.cartId}`);
+        res.redirect(`/api/carts/view-cart/${req.session.cartId}`);
     } catch (error) {
         res.json('error ao diminuir item do carrinho: ' + error.message);
     }
@@ -207,7 +170,7 @@ router.post("/increaseQuantity/:cid" , async (req, res) => {
 
     try {
         await _CartRepository.increaseProductQuantity(request.cid, request.pid);
-        res.redirect(`/api/view/cart/${req.session.cartId}`);
+        res.redirect(`/api/carts/view-cart/${req.session.cartId}`);
     } catch (error) {
         res.json('error ao aumentar item do carrinho: ' + error.message);
     }
