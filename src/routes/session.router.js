@@ -2,8 +2,6 @@ import express from "express";
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
 
-import { userService } from '../services/index.js';
-
 const router = express.Router();
 let scope;
 

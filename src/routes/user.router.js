@@ -11,8 +11,8 @@ router.post("/register",  passport.authenticate("register", { failureRedirect: "
 
 router.get('/profile', (req, res) => {
     if (!req.session.user) {
-        const messages = req.session.messages = "Acesso negado! Verifique seu você possui acesso a essa pagina ou está logado"
-        res.redirect('/forbidden')
+        const messages = req.session.messages = "Acesso negado! Verifique seu você possui acesso a essa pagina ou está logado" || []
+        res.render('forbidden', {messages });
     }else{
         const { firstName, lastName, email, birthday } = req.session.user;
         res.render('profile', { firstName, lastName, email, birthday });

@@ -1,5 +1,4 @@
 import UserDto from '../dto/user.dto.js';
-import ProductDTO from "../dto/product.dto.js";
 
 class UserService {
     constructor(repository) {

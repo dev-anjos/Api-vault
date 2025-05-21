@@ -45,10 +45,6 @@
         const qty = parseInt(quantity);
         if (isNaN(qty) || qty < 0) {
             document.getElementById(`decrease-${productId}`).disabled = true;
-        } else if (qty <= 1) {
-            document.getElementById(`decrease-${productId}`).disabled = true;
-        } else {
-            document.getElementById(`decrease-${productId}`).disabled = false;
-        }
+        } else document.getElementById(`decrease-${productId}`).disabled = qty <= 1;
     }
 </script>
