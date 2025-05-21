@@ -8,7 +8,7 @@
                 <p id="quantity">Quantidade: {{this.quantity}}</p>
 
                 <div class="formQuantity">
-                    <form action="/api/view/increaseQuantity/{{../cartId}}" method="post" class="increase">
+                    <form action="/increaseQuantity/{{../cartId}}" method="post" class="increase">
                         <input type="hidden" name="pid" value="{{this._doc._id}}">
                         <button
                                 name="action"
@@ -17,7 +17,7 @@
                         >+</button>
                     </form>
 
-                    <form action="/api/view/decreaseQuantity/{{../cartId}}" method="post" class="decrease">
+                    <form action="/decreaseQuantity/{{../cartId}}" method="post" class="decrease">
                         <input type="hidden" name="pid" value="{{this._doc._id}}">
                         <button
                                 id="decrease-{{this._doc._id}}"
@@ -37,7 +37,7 @@
 
     </ul>
 
-    <a href="/api/view/products/">Continuar Comprando</a>
+    <a href="/products/">Continuar Comprando</a>
 </div>
 
 <script>

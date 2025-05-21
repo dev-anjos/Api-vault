@@ -9,37 +9,8 @@ import User from "../database/models/user.model.js";
 
 const LocalStrategy = local.Strategy;
 
-//
-// const JWTStrategy = jwt.Strategy;
-// const ExtractJWT = jwt.ExtractJwt;
-//
-// const cookieExtractor = (req) => {
-//     let token = null;
-//     if (req && req.cookies) {
-//         return (token = req.cookies["accessToken"]);
-//     }
-// };
 
 const initializePassport = () => {
-
-    // passport.use(
-    //     "jwt",
-    //     new JWTStrategy(
-    //         {
-    //             jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-    //             secretOrKey: process.env.JWT_SECRET,
-    //         },
-    //         async (jwt_payload, done) => {
-    //             try {
-    //                 return done(null, jwt_payload);
-    //             } catch (error) {
-    //                 return done(error);
-    //             }
-    //         }
-    //     )
-    // );
-    //
-
 
     passport.use('register', new LocalStrategy({
         passReqToCallback: true, usernameField: 'email', passwordField: 'password'
@@ -54,7 +25,7 @@ const initializePassport = () => {
             const passwordHashed = await createHash(password);
             const newUser = new User({ firstName, lastName, email, birthday, password: passwordHashed });
 
-            if (!(email === 'adminCoder@coder.com' && password === 'adminCod3r123')) {
+            if ((email === 'adminCoder@coder.com' && password === 'adminCod3r123')) {
                 newUser.role = 'admin';
             } else {
                 newUser.role = 'user';

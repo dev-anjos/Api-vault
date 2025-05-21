@@ -16,5 +16,9 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.plugin(mongoosePaginate)
+userSchema.pre('findOneAndUpdate', function(next) {
+    this.set({ last_connection: new Date() });
+    next();
+});
 
 export default mongoose.model(userCollections, userSchema);

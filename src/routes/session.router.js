@@ -14,9 +14,7 @@ router.use( async(req, res, next) => {
     next();
 });
 
-router.post('/login' ,  passport.authenticate("login" , { failureRedirect: "/api/view/forbidden" }), async (req, res) => {
-
-    await userService.findUserByIdAndUpdate(req.user._id, { $set: { last_connection: new Date() } }, { new: true });
+router.post('/login' ,  passport.authenticate("login" , { failureRedirect: "/forbidden" }), async (req, res) => {
 
     req.session.user = {
         firstName: req.user.firstName,
@@ -46,7 +44,7 @@ router.post('/login' ,  passport.authenticate("login" , { failureRedirect: "/api
 router.get('/loginwithgithub', passport.authenticate('loginWithGithub', scope = ['user']), (req, res) => {});
 
 router.get(
-'/githubcallback', passport.authenticate('loginWithGithub', { failureRedirect: '/api/view/forbidden' }),
+'/githubcallback', passport.authenticate('loginWithGithub', { failureRedirect: '/forbidden' }),
     async (req, res) => {
     req.session.user = req.user;
     res.redirect('/api/user/profile');
@@ -57,7 +55,7 @@ router.get('/logout', (req, res) => {
         if (!err) {
             res.clearCookie('userData');
             res.clearCookie('authToken');
-            return res.redirect("/api/view");
+            return res.redirect("/");
         }else{
             return res.status(500).send({ error: err.message });
         }

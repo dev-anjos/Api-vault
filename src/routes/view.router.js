@@ -42,7 +42,7 @@ router.post('/create',async (req, res) => {
 
         const io = req.app.socketServer;
         if (io) { io.emit('addProduct', newProduct)}
-        res.redirect("/api/view/realtimeproducts");
+        res.redirect("/realtimeproducts");
     } catch (error) {
         if (error.code === 11000) {
             return res.status(400).json({ error: "O código ou título já existe no banco de dados" });
@@ -73,8 +73,8 @@ router.get('/products', async (req, res) => {
             page: products.page,
             hasNexTPage: products.hasNextPage ? products.hasNextPage : false,
             hasPrevPage: products.hasPrevPage ? products.hasPrevPage : false,
-            prevLink: products.hasPrevPage ? `/api/view/products?page=${products.prevPage}` : null,
-            nextLink: products.hasNextPage ? `/api/view/products?page=${products.nextPage}` : null,
+            prevLink: products.hasPrevPage ? `/products?page=${products.prevPage}` : null,
+            nextLink: products.hasNextPage ? `/products?page=${products.nextPage}` : null,
         }
 
         res.render('products', {
@@ -114,31 +114,6 @@ router.get('/detailsProduct/:id', async (req, res) => {
     }
 })
 
-// Rotas carrinho
-/*router.get('/cart/:cid', async (req, res) => {
-    const { cid } = req.params;
-
-    if (!cid) {
-        res.send("Carrinho não encontrado");
-    }
-
-    const currentCartId = req.session.cartId = cid
-    const cart = await _CartRepository.getById(currentCartId);
-
-    const productIds = cart.products.map((product) => product.product.toString());
-    const products = await Promise.all(productIds.map((id) => _ProductRepository.getById(id)));
-
-    const cartProducts = cart.products.map((cartProduct) => {
-        const product = products.find((p) => p._id.toString() === cartProduct.product.toString());
-        return { ...product, quantity: cartProduct.quantity };
-    });
-
-    res.render("cart", { cartId: currentCartId, cart: cartProducts });
-
-
-})*/
-
-
 
 router.post('/removeFromCart/:cid',
     async (req, res) => {
@@ -147,7 +122,7 @@ router.post('/removeFromCart/:cid',
         try {
             await _CartRepository.removeProductFromCart(request.cid, request.pid);
 
-            res.redirect(`/api/view/cart/${request.cid}`);
+            res.redirect(`/cart/${request.cid}`);
         } catch (error) {
             res.json('error ao deletar item do carrinho: ' + error.message);
         }

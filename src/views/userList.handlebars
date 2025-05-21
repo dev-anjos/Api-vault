@@ -1,6 +1,6 @@
 <div class="container">
     <h2>Lista de Usuários</h2>
-    <button class="btn btn-danger mb-3" onclick="location.href='/api/view/delete-users-inactive'">Limpar Usuários Antigos</button>
+    <button class="btn btn-danger mb-3" onclick="location.href='/delete-users-inactive'">Limpar Usuários Antigos</button>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -15,7 +15,7 @@
                     <td>{{this.email}}</td>
                     <td>{{this.last_connection}}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-secondary" onclick="location.href='/api/view/user-details/{{this.id}}'">Ver Detalhes</button>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="location.href='/user-details/{{this.id}}'">Ver Detalhes</button>
                     </td>
                 </tr>
             {{/each}}

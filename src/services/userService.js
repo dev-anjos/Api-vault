@@ -25,6 +25,8 @@ class UserService {
 
     async findUserByIdAndUpdate(id,userData) {
         const userDto = new UserDto(userData);
+        console.log(userDto);
+
         return this.repository.update(id,userDto);
     }
 

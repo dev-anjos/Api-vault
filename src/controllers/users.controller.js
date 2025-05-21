@@ -16,7 +16,7 @@ class UserController{
 
         if (req.session.user.role !== 'admin') {
             const messages = req.session.messages = "Acesso negado! Espaço destinados a Admin."
-            res.render('forbidden', {messages})
+            return res.render('forbidden', {messages})
         }
 
         try {
@@ -38,10 +38,10 @@ class UserController{
                 hasNextPage: paginatedUser.hasNextPage,
                 hasPrevPage: paginatedUser.hasPrevPage,
                 prevLink: paginatedUser.hasPrevPage
-                    ? `/api/view/user-list?page=${paginatedUser.prevPage}&limit=${limit}`
+                    ? `/user-list?page=${paginatedUser.prevPage}&limit=${limit}`
                     : null,
                 nextLink: paginatedUser.hasNextPage
-                    ? `/api/view/user-list?page=${paginatedUser.nextPage}&limit=${limit}`
+                    ? `/user-list?page=${paginatedUser.nextPage}&limit=${limit}`
                     : null,
             });
         } catch (error) {
